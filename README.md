@@ -22,25 +22,25 @@ Configuration
 
 	'root' => DOCROOT,
 
-Where is the "root" of your system.  This should rarely be changed.  This is used to help make the return output string relative so you can use it directly in html::* functions.
+Where is the "root" of your system?  This should rarely be changed.  This is used to help make the return output string relative so you can use it directly in kohana's html helper.
 
-	'dir'=> DOCROOT.'media/cache',
+	'dir' => DOCROOT.'media/cache',
 
-Where should the out files be stored?
+Where should the out files be stored?  The location of this folder needs to be open to the public so anyone browsing your site can access it.
 
 	'lifetime' => 25200,
 
-How long should the out cache of the module last?  This really only comes into play if the environment is Kohana::DEVELOPMENT (refer to the code for details).
+How long should the cache of the module last?  This really only comes into play if the environment is NOT Kohana::PRODUCTION (refer to the code for details).
 
-	'compressor'=> 'yui',
+	'compressor' => 'yui',
 
-Compressor to use.
+Which compressor to use?  YUI is able to compress javascript and stylesheet files, so it is used by default (and is the only one implemented in the module).
 
 
 Usage
 ---------------------
 
-A typical use case would be to provide the media files you that need to be compressed and a output file will be generated for you.
+A typical use case would be to provide the media files that you need to be compressed and a output file will be generated for you.
 
 		$result = Media::instance()->javascripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'));
 		html::script($result);
