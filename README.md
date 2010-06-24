@@ -42,16 +42,20 @@ Usage
 
 A typical use case would be to provide the media files that you need to be compressed and a output file will be generated for you.
 
-		$result = Media::instance()->javascripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'));
+		$result = Media::instance()->scripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'));
 		html::script($result);
 
 You can also choose a custom output file.  If an absolute path is not provided, the out file will be put relative to the DOCROOT (where index.php is).
 
-		$result = Media::instance()->javascripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'), 'out.js');
+		$result = Media::instance()->scripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'), 'out.js');
 		html::script($result);
 
 Note, that in both cases jquery was put before jquery ui; dependencies matter!
 
+Stylesheets work the same way.
+
+		$result = Media::instance()->styles(array('media/css/reset.css', 'media/css/main.css'));
+		html::style($result);
 
 Links
 ---------------------

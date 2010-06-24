@@ -13,7 +13,7 @@
 abstract class Media_Core {
 
 	// Key for cache
-	const CACHE_KEY = 'media-cache';
+	const CACHE_KEY = 'kohana-media-cache';
 
 	// Media instances
 	protected static $_instances = array();
@@ -176,7 +176,7 @@ abstract class Media_Core {
 	 * @param   string   desired out file (absolute path) [optional]
 	 * @return  string   the compressed out file
 	 */
-	public function javascripts(array $files, $out = NULL)
+	public function scripts(array $files, $out = NULL)
 	{
 		$out = ($out == NULL) ? $this->_out($files, 'js') : $out;
 
@@ -196,7 +196,7 @@ abstract class Media_Core {
 	 * @param   string   desired out file (absolute path) [optional]
 	 * @return  string   the compressed out file
 	 */
-	public function stylesheets(array $files, $out = NULL)
+	public function styles(array $files, $out = NULL)
 	{
 		$out = ($out == NULL) ? $this->_out($files, 'css') : $out;
 
