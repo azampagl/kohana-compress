@@ -6,7 +6,7 @@ return array
 	(
 		'root'			=> DOCROOT,
 		'dir'			=> DOCROOT.'media/cache',
-		'lifetime'		=> 25200,
-		'compressor'	=> 'yui',
+		'filemtime'		=> TRUE,
+		'compressor'		=> 'yui',
 	),
 );

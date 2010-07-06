@@ -14,8 +14,8 @@ Requirements
 Setup
 ---------------------
 
-Enable the media module in Kohana's bootstrap file.
-
+- Enable the media module in Kohana's bootstrap file.
+- Properly set the Kohana::$environment variable in the bootstrap file.
 
 Configuration
 ---------------------
@@ -28,9 +28,9 @@ Where is the "root" of your system?  This should rarely be changed.  This is use
 
 Where should the out files be stored?  The location of this folder needs to be open to the public so anyone browsing your site can access it.
 
-	'lifetime' => 25200,
+	'filemtime' => TRUE,
 
-How long should the cache of the module last?  This really only comes into play if the environment is NOT Kohana::PRODUCTION (refer to the code for details).
+Use file mod times when determining if the files are already cached?  If this is enabled, it will check if the file have changed since the last compression/cache.  It is recommended to set this value to FALSE for very popular sites.
 
 	'compressor' => 'yui',
 
@@ -40,22 +40,25 @@ Which compressor to use?  YUI is able to compress javascript and stylesheet file
 Usage
 ---------------------
 
+If the Kohana::$environment variable is set to something other than Kohana::PRODUCTION, the files sent will be immediately returned.  The result of both Media::scripts() and Media::styles() will always be an array of length >= 1.
+
 A typical use case would be to provide the media files that you need to be compressed and a output file will be generated for you.
 
 		$result = Media::instance()->scripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'));
-		html::script($result);
+		foreach ($result as $file) {echo html::script($file)};
 
 You can also choose a custom output file.  If an absolute path is not provided, the out file will be put relative to the DOCROOT (where index.php is).
 
 		$result = Media::instance()->scripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'), 'out.js');
-		html::script($result);
+		foreach ($result as $file) {echo html::script($file)};
 
 Note, that in both cases jquery was put before jquery ui; dependencies matter!
 
 Stylesheets work the same way.
 
 		$result = Media::instance()->styles(array('media/css/reset.css', 'media/css/main.css'));
-		html::style($result);
+		foreach ($result as $file) {echo html::style($file)};
+
 
 Links
 ---------------------

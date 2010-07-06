@@ -12,9 +12,6 @@
  */
 abstract class Media_Core {
 
-	// Key for cache
-	const CACHE_KEY = 'kohana-media-cache';
-
 	// Media instances
 	protected static $_instances = array();
 
@@ -65,48 +62,12 @@ abstract class Media_Core {
 	/**
 	 * Checks to see if the cache has already been generated.
 	 *
-	 * If the current system is NOT in production, this
-	 * function will do an additional check to see if any
-	 * of the files have been modified.
-	 *
 	 * @param   array    files to be cached
 	 * @param   string   designated out file
-	 * @return  string
+	 * @return  boolean
 	 */
 	protected function _cached(array $files, $out)
 	{
-		// Are we in production?  Do filemod check
-		if (Kohana::$environment != Kohana::PRODUCTION)
-		{
-			$cache = Kohana::cache(Media::CACHE_KEY);
-			$expired = FALSE;
-
-			foreach ($files as $file)
-			{
-				if (isset($cache[$file]))
-				{
-					// Have we been modified since last cache?
-					if ($cache[$file] < filemtime($file))
-					{
-						$cache[$file] = filemtime($file);
-						$expired = TRUE;
-					}
-				}
-				// It wasn't in the cache, add it
-				else
-				{
-					$cache[$file] = filemtime($file);
-				}
-			}
-
-			Kohana::cache(Media::CACHE_KEY, $cache, $this->_config['lifetime']);
-
-			if ($expired)
-			{
-				return FALSE;
-			}
-		}
-
 		// If cache module is available, add it here
 		//  to see if out file exists instead of checking
 		//  for it on disk.  Otherwise use the file check below.
@@ -115,22 +76,28 @@ abstract class Media_Core {
 	}
 
 	/**
+	 * Returns a cleaned out format.
+	 *
 	 * Cleans the absolute path of out file to a relative
-	 * one that can be used by html::*.
+	 * one that can be used by html::*.  The output is
+	 * also put into array so the output, regardless of
+	 * the current environment, is normalized.
 	 *
 	 * @param   string    absolute path of out file
-	 * @return  string
+	 * @return  array
 	 */
 	protected function _format($out)
 	{
-		return str_replace(array($this->_config['root'], DIRECTORY_SEPARATOR), array('', '/'), $out);
+		return array(str_replace(array(strtolower($this->_config['root']), '\\'), array('', '/'), $out));
 	}
 
 	/**
 	 * Determines a unique hash for the files.
 	 *
 	 * The order of the files MATTERS.  Some might
-	 * files might be dependent on others...
+	 * files might be dependent on others...  Also,
+	 * if filemtime is set to true in the configuration
+	 * file mod times will be included in the hash.
 	 *
 	 * @param   array    files
 	 * @return  string
@@ -140,9 +107,21 @@ abstract class Media_Core {
 		$files = array_map('strtolower', $files);
 
 		$hash = '';
-		foreach ($files as $file)
+
+		// File mod times enabled?
+		if ($this->_config['filemtime'])
 		{
-			$hash .= $file;
+			foreach ($files as $file)
+			{
+				$hash .= $file.filemtime(realpath($file));
+			}
+		}
+		else
+		{
+			foreach ($files as $file)
+			{
+				$hash .= $file;
+			}
 		}
 
 		return sha1($hash);
@@ -158,7 +137,8 @@ abstract class Media_Core {
 	 */
 	protected function _out(array $files, $ext)
 	{
-		$dir = $this->_config['dir'];
+		$dir = strtolower($this->_config['dir'].DIRECTORY_SEPARATOR);
+		$ext = strtolower($ext);
 
 		// Make sure the directory exists
 		if ( ! file_exists($dir))
@@ -166,47 +146,59 @@ abstract class Media_Core {
 			mkdir($dir, 0777, TRUE);
 		}
 			
-		return $dir.DIRECTORY_SEPARATOR.$this->_hash($files).'.'.$ext;
+		return $dir.$this->_hash($files).'.'.$ext;
 	}
 
 	/**
 	 * Generate compressed javascript.
 	 *
 	 * @param   array    files to be compressed
-	 * @param   string   desired out file (absolute path) [optional]
-	 * @return  string   the compressed out file
+	 * @param   string   desired out file (absolute path or rel to root) [optional]
+	 * @return  array
 	 */
 	public function scripts(array $files, $out = NULL)
 	{
-		$out = ($out == NULL) ? $this->_out($files, 'js') : $out;
-
-		if ( ! $this->_cached($files, $out))
+		if (Kohana::$environment == Kohana::PRODUCTION)
 		{
-			$this->_compressor->compress($files, $out, array('type' => 'js'));
+			$out = ($out == NULL) ? $this->_out($files, 'js') : $out;
+
+			if ( ! $this->_cached($files, $out))
+			{
+				$this->_compressor->compress($files, $out, array('type' => 'js'));
+			}
+
+			// We need to provide a path relative to root, NOT including it
+			return $this->_format($out);
 		}
 
-		// We need to provide a path relative to root, NOT including it
-		return $this->_format($out);
+		// We're not in production, return the files as-is.
+		return $files;
 	}
 
 	/**
 	 * Generate compressed stylesheet.
 	 *
 	 * @param   array    files to be compressed
-	 * @param   string   desired out file (absolute path) [optional]
-	 * @return  string   the compressed out file
+	 * @param   string   desired out file (absolute path or rel to root) [optional]
+	 * @return  array
 	 */
 	public function styles(array $files, $out = NULL)
 	{
-		$out = ($out == NULL) ? $this->_out($files, 'css') : $out;
-
-		if ( ! $this->_cached($files, $out))
+		if (Kohana::$environment == Kohana::PRODUCTION)
 		{
-			$this->_compressor->compress($files, $out, array('type' => 'css'));
+			$out = ($out == NULL) ? $this->_out($files, 'css') : $out;
+				
+			if ( ! $this->_cached($files, $out))
+			{
+				$this->_compressor->compress($files, $out, array('type' => 'css'));
+			}
+				
+			// We need to provide a path relative to root, NOT including it
+			return $this->_format($out);
 		}
 
-		// We need to provide a path relative to root, NOT including it
-		return $this->_format($out);
+		// We're not in production, return the files as-is.
+		return $files;
 	}
 
 } // End Media_Core
