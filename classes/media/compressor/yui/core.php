@@ -35,7 +35,7 @@ abstract class Media_Compressor_Yui_Core extends Media_Compressor {
 		}
 		else
 		{
-			$cmd = 'cat '.implode(' ', array_map('realpath', $files)).' | '.$cmd;
+			$cmd = 'cat '.implode(' ', array_map('realpath', $files)).' | '.$cmd.'&';
 		}
 
 		exec($cmd);
