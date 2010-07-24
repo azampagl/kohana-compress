@@ -83,13 +83,8 @@ abstract class Media_Core {
 	 */
 	protected function _cache($data = NULL)
 	{
-		if ($data === NULL)
-		{
-			$cache = Kohana::cache(Media::CACHE_KEY, NULL, Media::CACHE_LIFETIME);
-			return ($cache != NULL) ? $cache : array();
-		}
-		
-		return Kohana::cache(Media::CACHE_KEY, $data);
+		$cache = Kohana::cache(Media::CACHE_KEY, $data, Media::CACHE_LIFETIME);
+		return ($cache != NULL) ? $cache : array();
 	}
 
 	/**

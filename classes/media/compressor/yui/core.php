@@ -13,7 +13,7 @@ abstract class Media_Compressor_Yui_Core extends Media_Compressor {
 	 */
 	public function compress(array $files, $out, array $args = NULL)
 	{
-		// Find our yui jar file
+		// Find our jar file
 		$jar = Kohana::find_file(dirname($this->_config['jar']), basename($this->_config['jar'], '.jar'), 'jar');
 
 		// Build our command
@@ -23,7 +23,7 @@ abstract class Media_Compressor_Yui_Core extends Media_Compressor {
 			$cmd .= '--'.$key.' '.escapeshellarg($value).' ';
 		}
 
-		// Make sure the process runs in the background
+		// Check what environment so that we can pipe
 		if (Kohana::$is_windows)
 		{
 			$cmd = 'type '.implode(' ', array_map('realpath', $files)).' | '.$cmd;
