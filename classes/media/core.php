@@ -133,7 +133,7 @@ abstract class Media_Core {
 				if (isset($cache[$hash]) AND $out != $cache[$hash])
 				{
 					// Remove the old compressed file
-					unlink($cache[$hash]);
+					@unlink($cache[$hash]);
 					
 					// Reset the cache
 					$cache[$hash] = $out;
