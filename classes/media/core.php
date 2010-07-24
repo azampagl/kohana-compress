@@ -218,7 +218,7 @@ abstract class Media_Core {
 	 */
 	protected function _out(array $files, $ext)
 	{
-		$dir = strtolower($this->_config['dir'].DIRECTORY_SEPARATOR);
+		$dir = realpath(strtolower($this->_config['dir'])).DIRECTORY_SEPARATOR;
 		$ext = strtolower($ext);
 
 		// Make sure the directory exists
