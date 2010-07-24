@@ -15,5 +15,7 @@ return array
 	),
 	'closure_service'		=> array
 	(
+		'url'				=> 'http://closure-compiler.appspot.com/compile',
+		'compilation_level'	=> 'ADVANCED_OPTIMIZATIONS',
 	),
 );
