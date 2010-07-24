@@ -239,7 +239,7 @@ abstract class Media_Core {
 	 */
 	public function scripts(array $files, $out = NULL)
 	{
-		$this->_execute($files, $out, array('type' => 'js'));
+		return $this->_execute($files, $out, array('type' => 'js'));
 	}
 
 	/**
@@ -251,7 +251,7 @@ abstract class Media_Core {
 	 */
 	public function styles(array $files, $out = NULL)
 	{
-		$this->_execute($files, $out, array('type' => 'css'));
+		return $this->_execute($files, $out, array('type' => 'css'));
 	}
 
 } // End Media_Core
