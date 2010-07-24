@@ -7,6 +7,6 @@ return array
 		'root'			=> DOCROOT,
 		'dir'			=> DOCROOT.'media/cache',
 		'filemtime'		=> TRUE,
-		'compressor'		=> 'yui',
+		'compressor'	=> 'yui',
 	),
 );

@@ -24,11 +24,11 @@ abstract class Media_Compressor_Core {
 	}
 
 	/**
-	 * Compresses the super file.
+	 * Generate compressed files.
 	 *
-	 * @param   array    files
-	 * @param   string   out file
-	 * @param   array    additional args [optional]
+	 * @param   array    files to be compressed
+	 * @param   string   desired out file (absolute path)
+	 * @param   array    additional arguments
 	 * @return  void
 	 */
 	abstract public function compress(array $files, $out, array $args = NULL);

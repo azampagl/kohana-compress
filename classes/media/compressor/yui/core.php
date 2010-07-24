@@ -9,12 +9,7 @@
 abstract class Media_Compressor_Yui_Core extends Media_Compressor {
 
 	/**
-	 * Generate compressed stylesheet.
-	 *
-	 * @param   array    files to be compressed
-	 * @param   string   desired out file (absolute path)
-	 * @param   array    additional arguments
-	 * @return  void
+	 * @see  parent
 	 */
 	public function compress(array $files, $out, array $args = NULL)
 	{
