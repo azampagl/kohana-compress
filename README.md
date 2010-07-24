@@ -50,14 +50,14 @@ A typical use case would be to provide the media files that you need to be compr
 You can also choose a custom output file.  If an absolute path is not provided, the out file will be put relative to the DOCROOT (where index.php is).
 
 		$result = Media::instance()->scripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'), 'out.js');
-		foreach ($result as $file) {echo html::script($file)};
+		foreach ($result as $file) {echo html::script($file);};
 
 Note, that in both cases jquery was put before jquery ui; dependencies matter!
 
 Stylesheets work the same way.
 
 		$result = Media::instance()->styles(array('media/css/reset.css', 'media/css/main.css'));
-		foreach ($result as $file) {echo html::style($file)};
+		foreach ($result as $file) {echo html::style($file);};
 
 
 Links
