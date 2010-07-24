@@ -3,7 +3,8 @@
  * Core of the media module.  Handles hashing, caching,
  * and the main public methods.
  *
- * Original concept Jonathan Geiger
+ * Original concept by Jonathan Geiger
+ * 
  * @see http://github.com/jonathangeiger/kohana-asset
  *
  * @package    Media
@@ -12,11 +13,17 @@
  */
 abstract class Media_Core {
 
-	// Media instances
+	// Cache key
+	const CACHE_KEY = 'kohana-media-cache';
+	
+	// Cache lifetime
+	const CACHE_LIFETIME = PHP_INT_MAX;
+	
+	// Instances
 	protected static $_instances = array();
 
 	/**
-	 * Singleton instance of the Media class.
+	 * Singleton instance of the class.
 	 *
 	 * @param   string   name of the instance to load
 	 * @return  Media
@@ -36,10 +43,14 @@ abstract class Media_Core {
 		return Media::$_instances[$name];
 	}
 
-	// Config
+	/**
+	 * @var  array  configuration
+	 */
 	protected $_config;
 
-	// Compressor object
+	/**
+	 * @var  Media_Compressor  compressor
+	 */
 	protected $_compressor;
 
 	/**
@@ -54,27 +65,101 @@ abstract class Media_Core {
 
 		// What type of compressor?
 		$compressor = 'Media_Compressor_'.ucfirst($config['compressor']);
-
-		// Generate compressor and pass config to it
-		$this->_compressor = new $compressor(Kohana::config('media/compressors')->{$config['compressor']});
+		$compressor_config = Kohana::config('media/compressors')->{$config['compressor']};
+		$this->_compressor = new $compressor($compressor_config);
 	}
 
 	/**
-	 * Checks to see if the cache has already been generated.
-	 *
-	 * @param   array    files to be cached
-	 * @param   string   designated out file
+	 * Sets/Gets the cache for this module.
+	 * 
+	 * It is highly advised that this method be overloaded
+	 * if you have Kohana's cache module enabled.
+	 * 
+	 * @see  http://github.com/kohana/cache
+	 * 
+	 * @param   array     data to store [optional]
+	 * @return  array
 	 * @return  boolean
 	 */
-	protected function _cached(array $files, $out)
+	protected function _cache($data = NULL)
 	{
-		// If cache module is available, add it here
-		//  to see if out file exists instead of checking
-		//  for it on disk.  Otherwise use the file check below.
+		if ($data === NULL)
+		{
+			$cache = Kohana::cache(Media::CACHE_KEY, NULL, Media::CACHE_LIFETIME);
+			return ($cache != NULL) ? $cache : array();
+		}
+		
+		return Kohana::cache(Media::CACHE_KEY, $data);
+	}
 
+	/**
+	 * Checks if the compressed file has already been generated.
+	 * 
+	 * It is highly advised that this method be overloaded
+	 * if you have Kohana's cache module enabled.
+	 * 
+	 * @see  http://github.com/kohana/cache
+	 * 
+	 * @param   string    designated out file
+	 * @return  boolean
+	 */
+	protected function _compressed($out)
+	{
 		return file_exists($out);
 	}
 
+	/**
+	 * Main execution flow.
+	 * 
+	 * @param   array    files to be compressed
+	 * @param   string   desired out file (absolute path or rel to root) [optional]
+	 * @param   array    additional parameters
+	 * @return  array
+	 */
+	protected function _execute(array $files, $out = NULL, array $args = NULL)
+	{
+		if (Kohana::$environment == Kohana::PRODUCTION)
+		{
+			$out = ($out == NULL) ? $this->_out($files, $args['type']) : $out;
+
+			if ( ! $this->_compressed($out))
+			{
+				$this->_compressor->compress($files, $out, $args);
+			}
+			
+			// Clean invalid cache files if GC enabled
+			if ($this->_config['gc'] === TRUE)
+			{
+				// Get a hash of just the file names
+				$hash = $this->_hash($files, FALSE);
+				
+				$cache = $this->_cache();
+				
+				if (isset($cache[$hash]) AND $out != $cache[$hash])
+				{
+					// Remove the old compressed file
+					unlink($cache[$hash]);
+					
+					// Reset the cache
+					$cache[$hash] = $out;
+					$this->_cache($cache);
+				}
+				elseif ( ! isset($cache[$hash]))
+				{
+					// Set the cache
+					$cache[$hash] = $out;					
+					$this->_cache($cache);
+				}
+			}
+			
+			// We need to provide a path relative to root, NOT including it
+			return $this->_format($out);
+		}
+
+		// We're not in production, return the files as-is.
+		return $files;
+	}
+	
 	/**
 	 * Returns a cleaned out format.
 	 *
@@ -100,16 +185,17 @@ abstract class Media_Core {
 	 * file mod times will be included in the hash.
 	 *
 	 * @param   array    files
+	 * @param   boolean  use filemtime
 	 * @return  string
 	 */
-	protected function _hash(array $files)
+	protected function _hash(array $files, $filemtime = TRUE)
 	{
 		$files = array_map('strtolower', $files);
 
 		$hash = '';
 
 		// File mod times enabled?
-		if ($this->_config['filemtime'])
+		if ($filemtime AND $this->_config['filemtime'])
 		{
 			foreach ($files as $file)
 			{
@@ -141,7 +227,7 @@ abstract class Media_Core {
 		$ext = strtolower($ext);
 
 		// Make sure the directory exists
-		if ( ! file_exists($dir))
+		if ( ! is_dir($dir))
 		{
 			mkdir($dir, 0777, TRUE);
 		}
@@ -158,21 +244,7 @@ abstract class Media_Core {
 	 */
 	public function scripts(array $files, $out = NULL)
 	{
-		if (Kohana::$environment == Kohana::PRODUCTION)
-		{
-			$out = ($out == NULL) ? $this->_out($files, 'js') : $out;
-
-			if ( ! $this->_cached($files, $out))
-			{
-				$this->_compressor->compress($files, $out, array('type' => 'js'));
-			}
-
-			// We need to provide a path relative to root, NOT including it
-			return $this->_format($out);
-		}
-
-		// We're not in production, return the files as-is.
-		return $files;
+		$this->_execute($files, $out, array('type' => 'js'));
 	}
 
 	/**
@@ -184,21 +256,7 @@ abstract class Media_Core {
 	 */
 	public function styles(array $files, $out = NULL)
 	{
-		if (Kohana::$environment == Kohana::PRODUCTION)
-		{
-			$out = ($out == NULL) ? $this->_out($files, 'css') : $out;
-				
-			if ( ! $this->_cached($files, $out))
-			{
-				$this->_compressor->compress($files, $out, array('type' => 'css'));
-			}
-				
-			// We need to provide a path relative to root, NOT including it
-			return $this->_format($out);
-		}
-
-		// We're not in production, return the files as-is.
-		return $files;
+		$this->_execute($files, $out, array('type' => 'css'));
 	}
 
 } // End Media_Core
