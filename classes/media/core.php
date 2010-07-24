@@ -168,7 +168,11 @@ abstract class Media_Core {
 	 */
 	protected function _format($out)
 	{
-		return array(str_replace(array(strtolower($this->_config['root']), '\\'), array('', '/'), $out));
+		return array(str_replace(
+			array(strtolower(realpath($this->_config['root']).DIRECTORY_SEPARATOR), '\\'),
+			array('', '/'),
+			$out)
+		);
 	}
 
 	/**
@@ -218,7 +222,7 @@ abstract class Media_Core {
 	 */
 	protected function _out(array $files, $ext)
 	{
-		$dir = realpath(strtolower($this->_config['dir'])).DIRECTORY_SEPARATOR;
+		$dir = realpath($this->_config['dir']).DIRECTORY_SEPARATOR;
 		$ext = strtolower($ext);
 
 		// Make sure the directory exists
@@ -227,7 +231,7 @@ abstract class Media_Core {
 			mkdir($dir, 0777, TRUE);
 		}
 			
-		return $dir.$this->_hash($files).'.'.$ext;
+		return strtolower($dir.$this->_hash($files).'.'.$ext);
 	}
 
 	/**
