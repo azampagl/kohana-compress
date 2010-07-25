@@ -14,6 +14,7 @@ Media module built for the Kohana PHP framework.  This will compress multiple me
 - Enable the media module in Kohana's bootstrap file.
 - Properly set the Kohana::$environment variable in the bootstrap file.
 
+
 ## Configuration
 
 ### Core (config/media.php)
@@ -42,37 +43,38 @@ Which compressor to use?  YUI is able to compress javascript and stylesheet file
 
 #### YUI
 
-	'java' => 'java',
+		'java' => 'java',
 
 Where is the java executable located (as if being used on a command-line)?
 
-	'jar' => 'vendor/yui/yuicompressor-x.y.z.jar',
+		'jar' => 'vendor/yui/yuicompressor-x.y.z.jar',
 
 Where is the compressor jar file located?
 
 #### Closure Application
 
-	'java' => 'java',
+		'java' => 'java',
 
 Where is the java executable located (as if being used on a command-line)?
 
-	'jar' => 'vendor/closure/closure-compiler-latest.jar',
+		'jar' => 'vendor/closure/closure-compiler-latest.jar',
 
 Where is the compressor jar file located?
 
-	'compilation_level' => 'SIMPLE_OPTIMIZATIONS',
+		'compilation_level' => 'SIMPLE_OPTIMIZATIONS',
 
 What level of compilation should be used?  Read Closure documentation!
 
 #### Closure Service
 
-	'url' => 'http://closure-compiler.appspot.com/compile',
+		'url' => 'http://closure-compiler.appspot.com/compile',
 
 URL address of the closure service?  Shouldn't have to be modified.
 
-	'compilation_level' => 'SIMPLE_OPTIMIZATIONS',
+		'compilation_level' => 'SIMPLE_OPTIMIZATIONS',
 
 What level of compilation should be used?  Read Closure documentation!
+
 
 ## Usage
 
@@ -98,6 +100,16 @@ Stylesheets work the same way.
 		foreach ($result as $file) {echo html::style($file);};
 
 ### Google Closure Service
+
+Many shared hosts do not provide java, so the Google Closure Service is an excellent alternative for compression.  In the module, you can either pass the full url to the javascript file or a relative url (regardless, make sure it is available via HTTP).
+
+		$result = Media::instance()->scripts(array('http://mysite.com/media/js1.js', 'http://mysite.com/media/js2.js'));
+		foreach ($result as $file) {echo html::script($file);};
+
+If you use relative paths, url::base(TRUE, TRUE) will be prepended to the file names.
+
+		$result = Media::instance()->scripts(array('media/js1.js', 'media/js2.js'));
+		foreach ($result as $file) {echo html::script($file);};
 
 
 ## Notes
