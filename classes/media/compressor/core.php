@@ -4,8 +4,8 @@
  * the compact method.
  *
  * @package    Media
- * @category   Compressor
  * @author     azampagl
+ * @license    ISC
  */
 abstract class Media_Compressor_Core {
 
@@ -38,7 +38,7 @@ abstract class Media_Compressor_Core {
 	 * for later compression.
 	 *
 	 * @param   array   files
-	 * @return  string  temp file
+	 * @return  string
 	 */
 	protected function _compact(array $files)
 	{

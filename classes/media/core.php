@@ -4,21 +4,23 @@
  * and the main public methods.
  *
  * Original concept by Jonathan Geiger
- * 
- * @see http://github.com/jonathangeiger/kohana-asset
+ * @see http://github.com/jonathangeiger
+ *
+ * Special thanks to Richard Willis for ideas and testing
+ * @see http://github.com/badsyntax
  *
  * @package    Media
- * @category   Core
  * @author     azampagl
+ * @license    ISC
  */
 abstract class Media_Core {
 
 	// Cache key
 	const CACHE_KEY = 'kohana-media-cache';
-	
+
 	// Cache lifetime
 	const CACHE_LIFETIME = PHP_INT_MAX;
-	
+
 	// Instances
 	protected static $_instances = array();
 
@@ -71,12 +73,12 @@ abstract class Media_Core {
 
 	/**
 	 * Sets/Gets the cache for this module.
-	 * 
+	 *
 	 * It is highly advised that this method be overloaded
 	 * if you have Kohana's cache module enabled.
-	 * 
+	 *
 	 * @see  http://github.com/kohana/cache
-	 * 
+	 *
 	 * @param   array     data to store [optional]
 	 * @return  array
 	 * @return  boolean
@@ -89,12 +91,12 @@ abstract class Media_Core {
 
 	/**
 	 * Checks if the compressed file has already been generated.
-	 * 
+	 *
 	 * It is highly advised that this method be overloaded
 	 * if you have Kohana's cache module enabled.
-	 * 
+	 *
 	 * @see  http://github.com/kohana/cache
-	 * 
+	 *
 	 * @param   string    designated out file
 	 * @return  boolean
 	 */
@@ -105,7 +107,7 @@ abstract class Media_Core {
 
 	/**
 	 * Main execution flow.
-	 * 
+	 *
 	 * @param   array    files to be compressed
 	 * @param   string   desired out file (absolute path or rel to root) [optional]
 	 * @param   array    additional parameters
@@ -121,20 +123,20 @@ abstract class Media_Core {
 			{
 				$this->_compressor->compress($files, $out, $args);
 			}
-			
+				
 			// Clean invalid cache files if GC enabled
 			if ($this->_config['gc'] === TRUE)
 			{
 				// Get a hash of just the file names
 				$hash = $this->_hash($files, FALSE);
-				
+
 				$cache = $this->_cache();
-				
+
 				if (isset($cache[$hash]) AND $out != $cache[$hash])
 				{
 					// Remove the old compressed file
 					@unlink($cache[$hash]);
-					
+						
 					// Reset the cache
 					$cache[$hash] = $out;
 					$this->_cache($cache);
@@ -142,11 +144,11 @@ abstract class Media_Core {
 				elseif ( ! isset($cache[$hash]))
 				{
 					// Set the cache
-					$cache[$hash] = $out;					
+					$cache[$hash] = $out;
 					$this->_cache($cache);
 				}
 			}
-			
+				
 			// We need to provide a path relative to root, NOT including it
 			return $this->_format($out);
 		}
@@ -154,7 +156,7 @@ abstract class Media_Core {
 		// We're not in production, return the files as-is.
 		return $files;
 	}
-	
+
 	/**
 	 * Returns a cleaned out format.
 	 *

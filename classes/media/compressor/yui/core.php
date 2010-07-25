@@ -2,9 +2,11 @@
 /**
  * Yui compressor implementation.
  *
+ * @see http://developer.yahoo.com/yui/compressor/
+ *
  * @package    Media
- * @category   Yui Compressor
  * @author     azampagl
+ * @license    ISC
  */
 abstract class Media_Compressor_Yui_Core extends Media_Compressor {
 
