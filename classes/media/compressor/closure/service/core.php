@@ -20,7 +20,7 @@ abstract class Media_Compressor_Closure_Service_Core extends Media_Compressor {
 		
 		for ($i = 0; $i < count($files); $i++)
 		{
-			if ( ! strpos($files[$i], 'http://'))
+			if (strpos($files[$i], 'http://') === FALSE)
 			{
 				$files[$i] = URL::base(TRUE, TRUE).'/'.$files[$i]; 
 			}
@@ -33,9 +33,11 @@ abstract class Media_Compressor_Closure_Service_Core extends Media_Compressor {
 			'output_info'		=> 'compiled_code',
 		);
 		
-		$response = Remote::get($url, array(
+		$post = preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', http_build_query($query));
+		
+		$response = Remote::get($this->_config['url'], array(
 			CURLOPT_POST       => TRUE,
-			CURLOPT_POSTFIELDS => http_build_query($query),
+			CURLOPT_POSTFIELDS => $post,
 		));
 		
 		file_put_contents($out, $response);

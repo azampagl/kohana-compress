@@ -11,11 +11,11 @@ return array
 	(
 		'java'				=> 'java',
 		'jar'				=> 'vendor/closure/closure-compiler-latest.jar',
-		'compilation_level'	=> 'ADVANCED_OPTIMIZATIONS',
+		'compilation_level'	=> 'SIMPLE_OPTIMIZATIONS',
 	),
 	'closure_service'		=> array
 	(
 		'url'				=> 'http://closure-compiler.appspot.com/compile',
-		'compilation_level'	=> 'ADVANCED_OPTIMIZATIONS',
+		'compilation_level'	=> 'SIMPLE_OPTIMIZATIONS',
 	),
 );

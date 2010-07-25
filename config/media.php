@@ -8,6 +8,6 @@ return array
 		'dir'			=> DOCROOT.'media/cache',
 		'gc'			=> TRUE,
 		'filemtime'		=> TRUE,
-		'compressor'	=> 'yui',
+		'compressor'	=> 'closure_service',
 	),
 );
