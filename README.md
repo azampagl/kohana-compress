@@ -26,6 +26,10 @@ Where is the "root" of your system?  This should rarely be changed.  This is use
 
 Where should the out files be stored?  The location of this folder needs to be open to the public so anyone browsing your site can access it.
 
+	'gc' => TRUE,
+
+Garbage collect old comoressed files?  When files are modified, the garbage collection will delete the old compressed files.  It is recommended to set this value to FALSE for very popular sites (clean the cache manually, if need be).
+
 	'filemtime' => TRUE,
 
 Use file mod times when determining if the files are already cached?  If this is enabled, it will check if the file have changed since the last compression/cache.  It is recommended to set this value to FALSE for very popular sites.
@@ -35,6 +39,40 @@ Use file mod times when determining if the files are already cached?  If this is
 Which compressor to use?  YUI is able to compress javascript and stylesheet files, so it is used by default.  Google Closure (application and service) are implemented as well, and has been known to have a higher compression ratio than YUI (doesn't support stylesheets).
 
 ### Compressors (config/media/compressors.php)
+
+#### YUI
+
+	'java' => 'java',
+
+Where is the java executable located (as if being used on a command-line)?
+
+	'jar' => 'vendor/yui/yuicompressor-x.y.z.jar',
+
+Where is the compressor jar file located?
+
+#### Closure Application
+
+	'java' => 'java',
+
+Where is the java executable located (as if being used on a command-line)?
+
+	'jar' => 'vendor/closure/closure-compiler-latest.jar',
+
+Where is the compressor jar file located?
+
+	'compilation_level' => 'SIMPLE_OPTIMIZATIONS',
+
+What level of compilation should be used?  Read Closure documentation!
+
+#### Closure Service
+
+	'url' => 'http://closure-compiler.appspot.com/compile',
+
+URL address of the closure service?  Shouldn't have to be modified.
+
+	'compilation_level' => 'SIMPLE_OPTIMIZATIONS',
+
+What level of compilation should be used?  Read Closure documentation!
 
 ## Usage
 
@@ -73,3 +111,7 @@ Stylesheets work the same way.
 [Kohana PHP Framework](http://kohanaframework.org/)
 
 [Jonathan Geiger's Original Asset Module](http://github.com/jonathangeiger/kohana-asset)
+
+[Yahoo's YUI Compressor](http://developer.yahoo.com/yui/compressor/)
+
+[Google's Closure Compressor](http://code.google.com/closure/compiler/docs/overview.html)
