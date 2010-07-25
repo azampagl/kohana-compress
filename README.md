@@ -1,24 +1,22 @@
-Media
-====================
+# Media
 
 Media module built for the Kohana PHP framework.  This will compress multiple media files (javascript and stylesheets) on the fly into one file increasing you website's performance (less requests and bandwidth).  The original concept was conceived by Jonathan Geiger's Asset module.  This module simply takes an alternative route for the same problem.
 
 
-Requirements
----------------------
+## Requirements
 
 - PHP 5.2+
-- Kohana PHP framework (read the docs!)
+- Kohana PHP 3.x (read the docs!)
 
 
-Setup
----------------------
+## Setup
 
 - Enable the media module in Kohana's bootstrap file.
 - Properly set the Kohana::$environment variable in the bootstrap file.
 
-Configuration
----------------------
+## Configuration
+
+### Core (config/media.php)
 
 	'root' => DOCROOT,
 
@@ -34,11 +32,13 @@ Use file mod times when determining if the files are already cached?  If this is
 
 	'compressor' => 'yui',
 
-Which compressor to use?  YUI is able to compress javascript and stylesheet files, so it is used by default (and is the only one implemented in the module).
+Which compressor to use?  YUI is able to compress javascript and stylesheet files, so it is used by default.  Google Closure (application and service) are implemented as well, and has been known to have a higher compression ratio than YUI (doesn't support stylesheets).
 
+### Compressors (config/media/compressors.php)
 
-Usage
----------------------
+## Usage
+
+### Normal
 
 If the Kohana::$environment variable is set to something other than Kohana::PRODUCTION, the files sent will be immediately returned.  The result of both Media::scripts() and Media::styles() will always be an array of length >= 1.
 
@@ -59,9 +59,14 @@ Stylesheets work the same way.
 		$result = Media::instance()->styles(array('media/css/reset.css', 'media/css/main.css'));
 		foreach ($result as $file) {echo html::style($file);};
 
+### Google Closure Service
 
-Links
----------------------
+
+## Notes
+* If you don't have java on your web server (shared hosting), use the Closure Service compiler.
+
+
+## Links
 
 [Markdown Reader](http://www.google.com/search?sourceid=chrome&ie=UTF-8&q=markdown+reader)
 
