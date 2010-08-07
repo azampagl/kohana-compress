@@ -1,6 +1,6 @@
 # Media
 
-Media module built for the Kohana PHP framework.  This will compress multiple media files (javascript and stylesheets) on the fly into one file increasing you website's performance (less requests and bandwidth).  The original concept was conceived by Jonathan Geiger's Asset module.  This module simply takes an alternative route for the same problem.
+Media module built for the Kohana PHP framework.  This will compress multiple media files (javascript and stylesheets) on the fly into one file increasing you website's performance (less requests and bandwidth).  The original concept was conceived by Jonathan Geiger's Asset module.  This module simply takes an alternative (and more advanced) route for the same problem.
 
 
 ## Requirements
@@ -29,15 +29,15 @@ Where should the out files be stored?  The location of this folder needs to be o
 
 		'gc' => TRUE,
 
-Garbage collect old comoressed files?  When files are modified, the garbage collection will delete the old compressed files.  It is recommended to set this value to FALSE for very popular sites (clean the cache manually, if need be).
+Garbage collect old compressed files?  When new files are compressed, the garbage collection will delete the old (unused) compressed files.  It is recommended to set this value to FALSE for very popular sites (clean the cache manually, if need be).
 
 		'filemtime' => TRUE,
 
-Use file mod times when determining if the files are already cached?  If this is enabled, it will check if the file have changed since the last compression/cache.  It is recommended to set this value to FALSE for very popular sites.
+Use file mod times when determining if the files need to be compressed?  If this is enabled, it will check if the files have changed since the last compression.  It is recommended to set this value to FALSE for very popular sites.
 
 		'compressor' => 'yui',
 
-Which compressor to use?  YUI is able to compress javascript and stylesheet files, so it is used by default.  Google Closure (application and service) are implemented as well, and has been known to have a higher compression ratio than YUI (doesn't support stylesheets).
+Which compressor to use?  YUI is able to compress javascript and stylesheet files, so it is used by default.  Google Closure (application and service) are implemented as well, and has been known to have a higher compression ratio than YUI (doesn't support stylesheets, though).
 
 ### Compressors (config/media/compressors.php)
 
@@ -85,35 +85,35 @@ If the Kohana::$environment variable is set to something other than Kohana::PROD
 A typical use case would be to provide the media files that you need to be compressed and a output file will be generated for you.
 
 		$result = Media::instance()->scripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'));
-		foreach ($result as $file) {echo html::script($file)};
+		echo implode("\n", array_map('HTML::script', $result)), "\n";
 
 You can also choose a custom output file.  If an absolute path is not provided, the out file will be put relative to the DOCROOT (where index.php is).
 
 		$result = Media::instance()->scripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'), 'out.js');
-		foreach ($result as $file) {echo html::script($file);};
-
-Note, that in both cases jquery was put before jquery ui; dependencies matter!
+		echo implode("\n", array_map('HTML::script', $result)), "\n";
 
 Stylesheets work the same way.
 
 		$result = Media::instance()->styles(array('media/css/reset.css', 'media/css/main.css'));
-		foreach ($result as $file) {echo html::style($file);};
+		echo implode("\n", array_map('HTML::script', $result)), "\n";
 
 ### Google Closure Service
 
 Many shared hosts do not provide java, so the Google Closure Service is an excellent alternative for compression.  In the module, you can either pass the full url to the javascript file or a relative url (regardless, make sure it is available via HTTP).
 
 		$result = Media::instance()->scripts(array('http://mysite.com/media/js1.js', 'http://mysite.com/media/js2.js'));
-		foreach ($result as $file) {echo html::script($file);};
+		echo implode("\n", array_map('HTML::script', $result)), "\n";
 
 If you use relative paths, url::base(TRUE, TRUE) will be prepended to the file names.
 
 		$result = Media::instance()->scripts(array('media/js1.js', 'media/js2.js'));
-		foreach ($result as $file) {echo html::script($file);};
+		echo implode("\n", array_map('HTML::script', $result)), "\n";
 
 
 ## Notes
+
 * If you don't have java on your web server (shared hosting), use the Closure Service compiler.
+* Dependencies matter!  Make sure to place things like jquery.js before jquery.ui.js; array('jquery.js', jquery.ui.js'). 
 
 
 ## Links
