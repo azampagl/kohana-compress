@@ -102,7 +102,7 @@ abstract class Media_Core {
 	 */
 	protected function _compressed($out)
 	{
-		return file_exists($out);
+		return is_file($out);
 	}
 
 	/**
