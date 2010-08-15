@@ -95,7 +95,7 @@ You can also choose a custom output file.  If an absolute path is not provided, 
 Stylesheets work the same way.
 
 		$result = Media::instance()->styles(array('media/css/reset.css', 'media/css/main.css'));
-		echo implode("\n", array_map('HTML::script', $result)), "\n";
+		echo implode("\n", array_map('HTML::style', $result)), "\n";
 
 ### Google Closure Service
 
