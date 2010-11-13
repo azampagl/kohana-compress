@@ -153,7 +153,7 @@ abstract class Compress_Core {
 			}
 				
 			// Provide a path relative to root, NOT including it
-			return $this->_format($out);
+			return array($this->_format($out));
 		}
 
 		// Not in production, return the files as-is.
@@ -164,20 +164,17 @@ abstract class Compress_Core {
 	 * Returns a cleaned out format.
 	 *
 	 * Cleans the absolute path of out file to a relative
-	 * one that can be used by html::*.  The output is
-	 * also put into array so the output, regardless of
-	 * the current environment, is normalized.
+	 * one that can be used by html::*.
 	 *
 	 * @param   string    absolute path of out file
 	 * @return  array
 	 */
 	protected function _format($out)
 	{
-		return array(str_replace(
-			array(strtolower(realpath($this->_config['root']).DIRECTORY_SEPARATOR), '\\'),
+		return str_ireplace(
+			array(realpath($this->_config['root']).DIRECTORY_SEPARATOR, '\\'),
 			array('', '/'),
-			$out)
-		);
+			$out);
 	}
 
 	/**
@@ -228,7 +225,6 @@ abstract class Compress_Core {
 	protected function _out(array $files, $ext)
 	{
 		$dir = realpath($this->_config['dir']).DIRECTORY_SEPARATOR;
-		$ext = strtolower($ext);
 
 		// Make sure the directory exists
 		if ( ! is_dir($dir))
@@ -236,7 +232,7 @@ abstract class Compress_Core {
 			mkdir($dir, 0777, TRUE);
 		}
 			
-		return strtolower($dir.$this->_hash($files).'.'.$ext);
+		return $dir.$this->_hash($files).'.'.$ext;
 	}
 
 	/**
