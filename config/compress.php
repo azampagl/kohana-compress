@@ -4,6 +4,7 @@ return array
 (
 	'default' => array
 	(
+		'force_exec'	=> FALSE,
 		'root'			=> DOCROOT,
 		'dir'			=> DOCROOT.'media/cache',
 		'gc'			=> TRUE,
@@ -12,6 +13,7 @@ return array
 	),
 	'js' => array
 	(
+		'force_exec'	=> FALSE,
 		'root'			=> DOCROOT,
 		'dir'			=> DOCROOT.'media/cache',
 		'gc'			=> TRUE,

@@ -1,6 +1,6 @@
-# Media
+# Compress
 
-Media module built for the Kohana PHP framework.  This will compress multiple media files (javascript and stylesheets) on the fly into one file increasing you website's performance (less requests and bandwidth).  The original concept was conceived by Jonathan Geiger's Asset module.  This module simply takes an alternative (and more advanced) route for the same problem.
+Compress module built for the Kohana PHP framework.  This will compress multiple media files (javascript and stylesheets) on the fly into one file increasing you website's performance (less requests and bandwidth).  The original concept was conceived by Jonathan Geiger's Asset module.  This module simply takes an alternative (and more advanced) route for the same problem.
 
 
 ## Requirements
@@ -13,11 +13,16 @@ Media module built for the Kohana PHP framework.  This will compress multiple me
 
 - Enable the media module in Kohana's bootstrap file.
 - Properly set the Kohana::$environment variable in the bootstrap file.
+- Create a writable folder for the compressed files.
 
 
 ## Configuration
 
 ### Core (config/media.php)
+
+		'force_exec' => FALSE,
+
+Should we force execution (compress files) regardless of the Kohana::$environment?
 
 		'root' => DOCROOT,
 
@@ -25,7 +30,7 @@ Where is the "root" of your system?  This should rarely be changed.  This is use
 
 		'dir' => DOCROOT.'media/cache',
 
-Where should the out files be stored?  The location of this folder needs to be open to the public so anyone browsing your site can access it.  **Make sure this directory exists beforehand!**
+Where should the compressed files be stored?  The location of this folder needs to be open to the public so anyone browsing your site can access it.  **Make sure this directory exists beforehand!**
 
 		'gc' => TRUE,
 

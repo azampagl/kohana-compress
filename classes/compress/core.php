@@ -119,7 +119,7 @@ abstract class Compress_Core {
 	 */
 	protected function _execute(array $files, $out, $format, array $args = NULL)
 	{
-		if (Kohana::$environment == Kohana::PRODUCTION)
+		if ($this->_config['force_exec'] OR Kohana::$environment == Kohana::PRODUCTION)
 		{
 			$out = ($out == NULL) ? $this->_out($files, $args['type']) : $out;
 
