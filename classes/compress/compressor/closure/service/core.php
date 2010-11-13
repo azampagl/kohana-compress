@@ -17,8 +17,8 @@ abstract class Compress_Compressor_Closure_Service_Core extends Compress_Compres
 	{
 		for ($i = 0; $i < count($files); $i++)
 		{
-			// If HTTP wasn't included, it was a local file
-			if (strpos($files[$i], 'http://') === FALSE)
+			// If HTTP(S) wasn't included, it was a local file
+			if (strpos($files[$i], 'http://') !== 0 AND strpos($files[$i], 'https://') !== 0)
 			{
 				$files[$i] = URL::base(TRUE, TRUE).'/'.$files[$i];
 			}
