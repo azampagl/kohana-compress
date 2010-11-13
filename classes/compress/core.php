@@ -16,7 +16,7 @@
 abstract class Compress_Core {
 
 	// Cache key
-	const CACHE_KEY = 'kohana-Compress-cache';
+	const CACHE_KEY = 'kohana-compress-cache';
 
 	// Cache lifetime
 	const CACHE_LIFETIME = PHP_INT_MAX;
@@ -36,7 +36,7 @@ abstract class Compress_Core {
 		if ( ! isset(Compress::$_instances[$name]))
 		{
 			// Load the config
-			$config = Kohana::config('Compress')->$name;
+			$config = Kohana::config('compress')->$name;
 
 			// Create a new Compress instance
 			Compress::$_instances[$name] = new Compress($config);
@@ -74,14 +74,15 @@ abstract class Compress_Core {
 	/**
 	 * Sets/Gets the cache for this module.
 	 *
-	 * It is highly advised that this method be overloaded
-	 * if you have Kohana's cache module enabled.
+	 * It is advised that this method be overloaded
+	 * for increased performance if you have Kohana's
+	 * Cache module.
 	 *
 	 * @see  http://github.com/kohana/cache
 	 *
 	 * @param   array     data to store [optional]
 	 * @return  array
-	 * @return  boolean
+	 * @return  mixed
 	 */
 	protected function _cache($data = NULL)
 	{
@@ -92,8 +93,9 @@ abstract class Compress_Core {
 	/**
 	 * Checks if the compressed file has already been generated.
 	 *
-	 * It is highly advised that this method be overloaded
-	 * if you have Kohana's cache module enabled.
+	 * It is advised that this method be overloaded
+	 * for increased performance if you have Kohana's
+	 * Cache module.
 	 *
 	 * @see  http://github.com/kohana/cache
 	 *
@@ -125,7 +127,7 @@ abstract class Compress_Core {
 			}
 				
 			// Clean invalid cache files if GC enabled
-			if ($this->_config['gc'] === TRUE)
+			if ($this->_config['gc'])
 			{
 				// Get a hash of just the file names
 				$hash = $this->_hash($files, FALSE);
@@ -149,11 +151,11 @@ abstract class Compress_Core {
 				}
 			}
 				
-			// We need to provide a path relative to root, NOT including it
+			// Provide a path relative to root, NOT including it
 			return $this->_format($out);
 		}
 
-		// We're not in production, return the files as-is.
+		// Not in production, return the files as-is.
 		return $files;
 	}
 

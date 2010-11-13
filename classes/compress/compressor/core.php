@@ -1,7 +1,7 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 /**
  * Base class for the all compressors.  Contains
- * the compact method.
+ * compact method (not used).
  *
  * @package    Compress
  * @author     azampagl
@@ -24,7 +24,7 @@ abstract class Compress_Compressor_Core {
 	}
 
 	/**
-	 * Generate compressed files.
+	 * Generate compressed file.
 	 *
 	 * @param   array    files to be compressed
 	 * @param   string   desired out file (absolute path)
@@ -42,7 +42,7 @@ abstract class Compress_Compressor_Core {
 	 */
 	protected function _compact(array $files)
 	{
-		$name = tempnam(sys_get_temp_dir(), 'Compresscache_'.strval(time()));
+		$name = tempnam(sys_get_temp_dir(), 'compresscache_'.strval(time()));
 
 		$tmp = fopen($name, "a");
 
