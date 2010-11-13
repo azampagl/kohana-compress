@@ -225,12 +225,6 @@ abstract class Compress_Core {
 	protected function _out(array $files, $ext)
 	{
 		$dir = realpath($this->_config['dir']).DIRECTORY_SEPARATOR;
-
-		// Make sure the directory exists
-		if ( ! is_dir($dir))
-		{
-			mkdir($dir, 0777, TRUE);
-		}
 			
 		return $dir.$this->_hash($files).'.'.$ext;
 	}

@@ -25,7 +25,7 @@ Where is the "root" of your system?  This should rarely be changed.  This is use
 
 		'dir' => DOCROOT.'media/cache',
 
-Where should the out files be stored?  The location of this folder needs to be open to the public so anyone browsing your site can access it.
+Where should the out files be stored?  The location of this folder needs to be open to the public so anyone browsing your site can access it.  **Make sure this directory exists beforehand!**
 
 		'gc' => TRUE,
 
