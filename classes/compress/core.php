@@ -104,7 +104,8 @@ abstract class Compress_Core {
 	 */
 	protected function _compressed($out)
 	{
-		return is_file($out);
+		clearstatcache(TRUE, $out);
+		return file_exists($out);
 	}
 
 	/**
