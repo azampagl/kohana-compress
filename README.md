@@ -11,18 +11,18 @@ Compress module built for the Kohana PHP framework.  This will compress multiple
 
 ## Setup
 
-- Enable the media module in Kohana's bootstrap file.
+- Enable the compress module in Kohana's bootstrap file.
 - Properly set the Kohana::$environment variable in the bootstrap file.
 - Create a writable folder for the compressed files.
 
 
 ## Configuration
 
-### Core (config/media.php)
+### Core (config/compress.php)
 
 		'force_exec' => FALSE,
 
-Should we force execution (compress files) regardless of the Kohana::$environment?
+Force execution (compress files) regardless of the Kohana::$environment?
 
 		'root' => DOCROOT,
 
@@ -44,7 +44,7 @@ Use file mod times when determining if the files need to be compressed?  If this
 
 Which compressor to use?  YUI is able to compress javascript and stylesheet files, so it is used by default.  Google Closure (application and service) are implemented as well, and has been known to have a higher compression ratio than YUI (doesn't support stylesheets, though).
 
-### Compressors (config/media/compressors.php)
+### Compressors (config/compress/compressors.php)
 
 #### YUI
 
@@ -62,7 +62,7 @@ Where is the compressor jar file located?
 
 Where is the java executable located (as if being used on a command-line)?
 
-		'jar' => 'vendor/closure/closure-compiler-latest.jar',
+		'jar' => 'vendor/closure/closure-compiler-x.jar',
 
 Where is the compressor jar file located?
 
@@ -85,33 +85,38 @@ What level of compilation should be used?  Read Closure documentation!
 
 ### Normal
 
-If the Kohana::$environment variable is set to something other than Kohana::PRODUCTION, the files sent will be immediately returned.  The result of both Media::scripts() and Media::styles() will always be an array of length >= 1.
+If the Kohana::$environment variable is set to something other than Kohana::PRODUCTION and 'force_exec' is set to FALSE, the files sent will be immediately returned.  The result of both Compress::scripts() and Compress::styles() will always be an array of length >= 1.
 
-A typical use case would be to provide the media files that you need to be compressed and a output file will be generated for you.
+A typical use case would be to provide the media files that you need to be compressed and an output file will be generated for you.
 
-		$result = Media::instance()->scripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'));
+		$result = Compress::instance()->scripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'));
 		echo implode("\n", array_map('HTML::script', $result)), "\n";
 
 You can also choose a custom output file.  If an absolute path is not provided, the out file will be put relative to the DOCROOT (where index.php is).
 
-		$result = Media::instance()->scripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'), 'out.js');
+		$result = Compress::instance()->scripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'), 'out.js');
+		echo implode("\n", array_map('HTML::script', $result)), "\n";
+
+If you want the absolute path of the compressed file, use FALSE for the $format parameter.
+
+		$result = Compress::instance()->scripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'), 'out.js', FALSE);
 		echo implode("\n", array_map('HTML::script', $result)), "\n";
 
 Stylesheets work the same way.
 
-		$result = Media::instance()->styles(array('media/css/reset.css', 'media/css/main.css'));
+		$result = Compress::instance()->styles(array('media/css/reset.css', 'media/css/main.css'));
 		echo implode("\n", array_map('HTML::style', $result)), "\n";
 
 ### Google Closure Service
 
-Many shared hosts do not provide java, so the Google Closure Service is an excellent alternative for compression.  In the module, you can either pass the full url to the javascript file or a relative url (regardless, make sure it is available via HTTP).
+Many shared hosts do not provide java, so the Google Closure Service is an excellent alternative for compression.  In the module, you can either pass the full url to the javascript file or a relative url (regardless, make sure it is available via HTTP/HTTPS).
 
-		$result = Media::instance()->scripts(array('http://mysite.com/media/js1.js', 'http://mysite.com/media/js2.js'));
+		$result = Compress::instance('closure')->scripts(array('http://mysite.com/media/js1.js', 'http://mysite.com/media/js2.js'));
 		echo implode("\n", array_map('HTML::script', $result)), "\n";
 
 If you use relative paths, url::base(TRUE, TRUE) will be prepended to the file names.
 
-		$result = Media::instance()->scripts(array('media/js1.js', 'media/js2.js'));
+		$result = Compress::instance('closure')->scripts(array('media/js1.js', 'media/js2.js'));
 		echo implode("\n", array_map('HTML::script', $result)), "\n";
 
 
