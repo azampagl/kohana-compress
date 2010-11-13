@@ -42,7 +42,7 @@ abstract class Compress_Compressor_Core {
 	 */
 	protected function _compact(array $files)
 	{
-		$name = tempnam(sys_get_temp_dir(), 'compresscache_'.strval(time()));
+		$name = tempnam(sys_get_temp_dir(), strval(time()));
 
 		$tmp = fopen($name, "a");
 
