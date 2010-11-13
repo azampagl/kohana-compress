@@ -3,11 +3,11 @@
  * Base class for the all compressors.  Contains
  * the compact method.
  *
- * @package    Media
+ * @package    Compress
  * @author     azampagl
  * @license    ISC
  */
-abstract class Media_Compressor_Core {
+abstract class Compress_Compressor_Core {
 
 	// Config
 	protected $_config;
@@ -16,7 +16,7 @@ abstract class Media_Compressor_Core {
 	 * Sets the config.
 	 *
 	 * @param   array   config
-	 * @return  Media_Compressor_*
+	 * @return  Compress_Compressor_*
 	 */
 	public function __construct($config)
 	{
@@ -42,7 +42,7 @@ abstract class Media_Compressor_Core {
 	 */
 	protected function _compact(array $files)
 	{
-		$name = tempnam(sys_get_temp_dir(), 'mediacache_'.strval(time()));
+		$name = tempnam(sys_get_temp_dir(), 'Compresscache_'.strval(time()));
 
 		$tmp = fopen($name, "a");
 
@@ -58,4 +58,4 @@ abstract class Media_Compressor_Core {
 		return $name;
 	}
 
-} // End Media_Compressor_Core
+} // End Compress_Compressor_Core

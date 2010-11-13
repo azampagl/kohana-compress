@@ -4,11 +4,11 @@
  *
  * @see http://developer.yahoo.com/yui/compressor/
  *
- * @package    Media
+ * @package    Compress
  * @author     azampagl
  * @license    ISC
  */
-abstract class Media_Compressor_Yui_Core extends Media_Compressor {
+abstract class Compress_Compressor_Yui_Core extends Compress_Compressor {
 
 	/**
 	 * @see  parent
@@ -38,4 +38,4 @@ abstract class Media_Compressor_Yui_Core extends Media_Compressor {
 		exec($cmd);
 	}
 
-} // End Media_Compressor_Yui_Core
+} // End Compress_Compressor_Yui_Core

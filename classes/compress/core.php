@@ -1,6 +1,6 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 /**
- * Core of the media module.  Handles hashing, caching,
+ * Core of the Compress module.  Handles hashing, caching,
  * and the main public methods.
  *
  * Original concept by Jonathan Geiger
@@ -9,14 +9,14 @@
  * Special thanks to Richard Willis for ideas and testing
  * @see http://github.com/badsyntax
  *
- * @package    Media
+ * @package    Compress
  * @author     azampagl
  * @license    ISC
  */
-abstract class Media_Core {
+abstract class Compress_Core {
 
 	// Cache key
-	const CACHE_KEY = 'kohana-media-cache';
+	const CACHE_KEY = 'kohana-Compress-cache';
 
 	// Cache lifetime
 	const CACHE_LIFETIME = PHP_INT_MAX;
@@ -28,21 +28,21 @@ abstract class Media_Core {
 	 * Singleton instance of the class.
 	 *
 	 * @param   string   name of the instance to load
-	 * @return  Media
+	 * @return  Compress
 	 */
 	public static function instance($name = 'default')
 	{
 		// Check if we already made this instance
-		if ( ! isset(Media::$_instances[$name]))
+		if ( ! isset(Compress::$_instances[$name]))
 		{
 			// Load the config
-			$config = Kohana::config('media')->$name;
+			$config = Kohana::config('Compress')->$name;
 
-			// Create a new Media instance
-			Media::$_instances[$name] = new Media($config);
+			// Create a new Compress instance
+			Compress::$_instances[$name] = new Compress($config);
 		}
 
-		return Media::$_instances[$name];
+		return Compress::$_instances[$name];
 	}
 
 	/**
@@ -51,7 +51,7 @@ abstract class Media_Core {
 	protected $_config;
 
 	/**
-	 * @var  Media_Compressor  compressor
+	 * @var  Compress_Compressor  compressor
 	 */
 	protected $_compressor;
 
@@ -59,15 +59,15 @@ abstract class Media_Core {
 	 * Set config instance and compressor.
 	 *
 	 * @param   Config   config file
-	 * @return  Media
+	 * @return  Compress
 	 */
 	protected function __construct($config)
 	{
 		$this->_config = $config;
 
 		// What type of compressor?
-		$compressor = 'Media_Compressor_'.ucfirst($config['compressor']);
-		$compressor_config = Kohana::config('media/compressors')->{$config['compressor']};
+		$compressor = 'Compress_Compressor_'.ucfirst($config['compressor']);
+		$compressor_config = Kohana::config('Compress/compressors')->{$config['compressor']};
 		$this->_compressor = new $compressor($compressor_config);
 	}
 
@@ -85,7 +85,7 @@ abstract class Media_Core {
 	 */
 	protected function _cache($data = NULL)
 	{
-		$cache = Kohana::cache(Media::CACHE_KEY, $data, Media::CACHE_LIFETIME);
+		$cache = Kohana::cache(Compress::CACHE_KEY, $data, Compress::CACHE_LIFETIME);
 		return ($cache != NULL) ? $cache : array();
 	}
 
@@ -260,4 +260,4 @@ abstract class Media_Core {
 		return $this->_execute($files, $out, array('type' => 'css'));
 	}
 
-} // End Media_Core
+} // End Compress_Core

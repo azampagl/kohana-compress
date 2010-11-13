@@ -1,3 +1,3 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 
-class Media_Exception extends Kohana_Exception {}
+class Compress extends Compress_Core {}

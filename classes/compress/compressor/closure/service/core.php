@@ -4,11 +4,11 @@
  *
  * @see http://code.google.com/closure/compiler/docs/gettingstarted_api.html
  *
- * @package    Media
+ * @package    Compress
  * @author     azampagl
  * @license    ISC
  */
-abstract class Media_Compressor_Closure_Service_Core extends Media_Compressor {
+abstract class Compress_Compressor_Closure_Service_Core extends Compress_Compressor {
 
 	/**
 	 * @see  parent
@@ -16,7 +16,7 @@ abstract class Media_Compressor_Closure_Service_Core extends Media_Compressor {
 	public function compress(array $files, $out, array $args = NULL)
 	{
 		if ($args['type'] != 'js')
-			throw new Media_Exception('Closure compiler only supports javascript files.');
+			throw new Compress_Exception('Closure compiler only supports javascript files.');
 
 		for ($i = 0; $i < count($files); $i++)
 		{
@@ -46,4 +46,4 @@ abstract class Media_Compressor_Closure_Service_Core extends Media_Compressor {
 		file_put_contents($out, $response);
 	}
 
-} // End Media_Compressor_Closure_Service_Core
+} // End Compress_Compressor_Closure_Service_Core

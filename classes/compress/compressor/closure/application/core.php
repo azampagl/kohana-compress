@@ -4,11 +4,11 @@
  *
  * @see http://code.google.com/closure/compiler/docs/gettingstarted_app.html
  *
- * @package    Media
+ * @package    Compress
  * @author     azampagl
  * @license    ISC
  */
-abstract class Media_Compressor_Closure_Application_Core extends Media_Compressor {
+abstract class Compress_Compressor_Closure_Application_Core extends Compress_Compressor {
 
 	/**
 	 * @see  parent
@@ -16,7 +16,7 @@ abstract class Media_Compressor_Closure_Application_Core extends Media_Compresso
 	public function compress(array $files, $out, array $args = NULL)
 	{
 		if ($args['type'] != 'js')
-			throw new Media_Exception('Closure compiler only supports javascript files.');
+			throw new Compress_Exception('Closure compiler only supports javascript files.');
 
 		// Find our jar file
 		$jar = Kohana::find_file(dirname($this->_config['jar']), basename($this->_config['jar'], '.jar'), 'jar');
@@ -36,4 +36,4 @@ abstract class Media_Compressor_Closure_Application_Core extends Media_Compresso
 		exec($cmd);
 	}
 
-} // End Media_Compressor_Closure_Application_Core
+} // End Compress_Compressor_Closure_Application_Core
