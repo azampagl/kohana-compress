@@ -11,7 +11,7 @@ return array
 		'filemtime'		=> TRUE,
 		'compressor'	=> 'yui',
 	),
-	'js' => array
+	'closure' => array
 	(
 		'force_exec'	=> FALSE,
 		'root'			=> DOCROOT,
