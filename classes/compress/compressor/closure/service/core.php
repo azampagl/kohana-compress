@@ -15,9 +15,6 @@ abstract class Compress_Compressor_Closure_Service_Core extends Compress_Compres
 	 */
 	public function compress(array $files, $out, array $args = NULL)
 	{
-		if ($args['type'] != 'js')
-			throw new Compress_Exception('Closure compiler only supports javascript files.');
-
 		for ($i = 0; $i < count($files); $i++)
 		{
 			// If HTTP wasn't included, it was a local file

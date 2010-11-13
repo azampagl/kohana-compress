@@ -15,9 +15,6 @@ abstract class Compress_Compressor_Closure_Application_Core extends Compress_Com
 	 */
 	public function compress(array $files, $out, array $args = NULL)
 	{
-		if ($args['type'] != 'js')
-			throw new Compress_Exception('Closure compiler only supports javascript files.');
-
 		// Find our jar file
 		$jar = Kohana::find_file(dirname($this->_config['jar']), basename($this->_config['jar'], '.jar'), 'jar');
 
