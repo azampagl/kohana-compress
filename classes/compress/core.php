@@ -113,11 +113,10 @@ abstract class Compress_Core {
 	 *
 	 * @param   array    files to be compressed
 	 * @param   string   desired out file name
-	 * @param   boolean  output string formatted relative to DOCROOT?
-	 * @param   array    additional params [optional]
+	 * @param   array    additional params
 	 * @return  array
 	 */
-	protected function _execute(array $files, $out, $format, array $args = NULL)
+	protected function _execute(array $files, $out, array $args)
 	{
 		if ($this->_config['force_exec'] OR Kohana::$environment == Kohana::PRODUCTION)
 		{
@@ -153,8 +152,8 @@ abstract class Compress_Core {
 				}
 			}
 				
-			// Provide a (http) path relative to root or absolute path
-			return ($format) ? array($this->_format($out)) : array($out);
+			// Provide a (http) path relative to root
+			return $this->_format($out);
 		}
 
 		// Not in production, return the files as-is.
@@ -165,7 +164,7 @@ abstract class Compress_Core {
 	 * Returns a cleaned out format.
 	 *
 	 * Cleans the absolute path of out file to a relative
-	 * one that can be used by html::*.
+	 * one that can be used by HTML::*.
 	 *
 	 * @param   string    absolute path of out file
 	 * @return  array
@@ -235,12 +234,11 @@ abstract class Compress_Core {
 	 *
 	 * @param   array    files to be compressed
 	 * @param   string   desired out file name [optional]
-	 * @param   boolean  output string formatted relative to DOCROOT? [optional]
 	 * @return  array
 	 */
-	public function scripts(array $files, $out = NULL, $format = TRUE)
+	public function scripts(array $files, $out = NULL)
 	{
-		return $this->_execute($files, $out, $format, array('type' => 'js'));
+		return $this->_execute($files, $out, array('type' => 'js'));
 	}
 
 	/**
@@ -248,12 +246,11 @@ abstract class Compress_Core {
 	 *
 	 * @param   array    files to be compressed
 	 * @param   string   desired out file name [optional]
-	 * @param   boolean  output string formatted relative to DOCROOT? [optional]
 	 * @return  array
 	 */
-	public function styles(array $files, $out = NULL, $format = TRUE)
+	public function styles(array $files, $out = NULL)
 	{
-		return $this->_execute($files, $out, $format, array('type' => 'css'));
+		return $this->_execute($files, $out, array('type' => 'css'));
 	}
 
 } // End Compress_Core
