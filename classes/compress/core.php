@@ -153,7 +153,7 @@ abstract class Compress_Core {
 			}
 				
 			// Provide a (http) path relative to root
-			return $this->_format($out);
+			return array($this->_format($out));
 		}
 
 		// Not in production, return the files as-is.
