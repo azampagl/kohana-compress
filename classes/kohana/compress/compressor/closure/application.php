@@ -1,7 +1,9 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 /**
- * Closure application compressor implementation.
- *
+ * Closure application compressor wrapper.
+ * 
+ * THIS IS MERELY A WRAPPER!
+ * Actual implementation belongs to the respected developer(s).
  * @see http://code.google.com/closure/compiler/docs/gettingstarted_app.html
  *
  * @package    Compress

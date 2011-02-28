@@ -5,12 +5,12 @@ return array
 	'yui'					=> array
 	(
 		'java'				=> 'java',
-		'jar'				=> 'vendor/yui/yuicompressor-2.4.2.jar',
+		'jar'				=> 'vendor/yui/yui.jar',
 	),
 	'closure_application'	=> array
 	(
 		'java'				=> 'java',
-		'jar'				=> 'vendor/closure/closure-compiler-706.jar',
+		'jar'				=> 'vendor/closure/closure.jar',
 		'compilation_level'	=> 'SIMPLE_OPTIMIZATIONS',
 	),
 	'closure_service'		=> array

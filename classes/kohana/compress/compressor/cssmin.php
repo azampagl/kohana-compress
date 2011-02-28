@@ -1,7 +1,9 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 /**
- * cssmin implementation.
+ * cssmin wrapper.
  *
+ * THIS IS MERELY A WRAPPER!
+ * Actual implementation belongs to the respected developer(s).
  * @see http://code.google.com/p/cssmin/
  *
  * @package    Compress
