@@ -1,7 +1,9 @@
 <?php defined('SYSPATH') or die('No direct access allowed.');
 /**
- * Yui compressor implementation.
+ * Yui compressor wrapper.
  *
+ * THIS IS MERELY A WRAPPER!
+ * Actual implementation belongs to the respected developer(s).
  * @see http://developer.yahoo.com/yui/compressor/
  *
  * @package    Compress
