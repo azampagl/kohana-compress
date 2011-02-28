@@ -141,7 +141,7 @@ abstract class Compress_Core {
 			$gc = ($this->_config['gc'] AND isset($cache[$key]) AND $out != $cache[$key]);
 			if ($gc)
 			{
-				@unlink($cache[$hash]);
+				@unlink($cache[$key]);
 			}
 
 			// Compress if new or if GC
