@@ -21,8 +21,39 @@ abstract class Compress_Core {
 	// Cache lifetime
 	const CACHE_LIFETIME = PHP_INT_MAX;
 
+	// Cache
+	protected static $_cache;
+	
 	// Instances
 	protected static $_instances = array();
+
+	/**
+	 * Gets/Sets the cache for this module.
+	 *
+	 * It is advised that this method be overloaded
+	 * for increased performance if you have Kohana's
+	 * Cache module.
+	 *
+	 * @see  http://github.com/kohana/cache
+	 *
+	 * @param   array     data to store [optional]
+	 * @return  mixed
+	 */
+	protected static function _cache(array $data = NULL)
+	{
+		// Get
+		if ($data == NULL)
+		{
+			if (isset(Compress::$_cache))
+				return Compress::$_cache;
+
+			return Compress::$_cache = Kohana::cache(Compress::CACHE_KEY, NULL, Compress::CACHE_LIFETIME);
+		}
+		
+		// Set
+		Compress::$_cache = $data;
+		return Kohana::cache(Compress::CACHE_KEY, $data);
+	}
 
 	/**
 	 * Singleton instance of the class.
@@ -66,46 +97,9 @@ abstract class Compress_Core {
 		$this->_config = $config;
 
 		// What type of compressor?
-		$compressor = 'Compress_Compressor_'.ucfirst($config['compressor']);
+		$compressor = 'Compress_Compressor_'.$config['compressor'];
 		$compressor_config = Kohana::config('compress/compressor')->{$config['compressor']};
 		$this->_compressor = new $compressor($compressor_config);
-	}
-
-	/**
-	 * Sets/Gets the cache for this module.
-	 *
-	 * It is advised that this method be overloaded
-	 * for increased performance if you have Kohana's
-	 * Cache module.
-	 *
-	 * @see  http://github.com/kohana/cache
-	 *
-	 * @param   array     data to store [optional]
-	 * @return  array
-	 * @return  mixed
-	 */
-	protected function _cache($data = NULL)
-	{
-		$cache = Kohana::cache(Compress::CACHE_KEY, $data, Compress::CACHE_LIFETIME);
-		return ($cache != NULL) ? $cache : array();
-	}
-
-	/**
-	 * Checks if the compressed file has already been generated.
-	 *
-	 * It is advised that this method be overloaded
-	 * for increased performance if you have Kohana's
-	 * Cache module.
-	 *
-	 * @see  http://github.com/kohana/cache
-	 *
-	 * @param   string    designated out file
-	 * @return  boolean
-	 */
-	protected function _compressed($out)
-	{
-		clearstatcache(TRUE, $out);
-		return file_exists($out);
 	}
 
 	/**
@@ -120,39 +114,44 @@ abstract class Compress_Core {
 	{
 		if ($this->_config['force_exec'] OR Kohana::$environment == Kohana::PRODUCTION)
 		{
-			$out = ($out == NULL) ? $this->_out($files, $args['type']) : $out;
+			// Get cache
+			$cache = Compress::_cache();
 
-			if ( ! $this->_compressed($out))
+			// Hash just the file names for a key
+			$key = $this->_hash($files, FALSE);
+
+			// If it's cached, don't re-process
+			if (isset($cache[$key]) AND ! $this->_config['gc'])
+				return array($this->_format($cache[$key]));
+
+			// Determine output file path
+			if ($out == NULL)
+			{
+				if ($this->_config['gc'])
+				{
+					$out = $this->_out($this->_hash($files), $args['type']);
+				}
+				else
+				{
+					$out = $this->_out($key, $args['type']);
+				}
+			}
+
+			// GC
+			$gc = ($this->_config['gc'] AND isset($cache[$key]) AND $out != $cache[$key]);
+			if ($gc)
+			{
+				@unlink($cache[$hash]);
+			}
+
+			// Compress if new or if GC
+			if ((! isset($cache[$key])) OR $gc)
 			{
 				$this->_compressor->compress($files, $out, $args);
+				$cache[$key] = $out;
+				Compress::_cache($cache);
 			}
-				
-			// Clean invalid cache files if GC enabled
-			if ($this->_config['gc'])
-			{
-				// Get a hash of just the file names
-				$hash = $this->_hash($files, FALSE);
 
-				$cache = $this->_cache();
-
-				if (isset($cache[$hash]) AND $out != $cache[$hash])
-				{
-					// Remove the old compressed file
-					@unlink($cache[$hash]);
-						
-					// Reset the cache
-					$cache[$hash] = $out;
-					$this->_cache($cache);
-				}
-				elseif ( ! isset($cache[$hash]))
-				{
-					// Set the cache
-					$cache[$hash] = $out;
-					$this->_cache($cache);
-				}
-			}
-				
-			// Provide a (http) path relative to root
 			return array($this->_format($out));
 		}
 
@@ -218,15 +217,13 @@ abstract class Compress_Core {
 	 * Determines the out destination for the new
 	 * compressed file.
 	 *
-	 * @param   array    files
+	 * @param   string   file
 	 * @param   string   extension
 	 * @return  string
 	 */
-	protected function _out(array $files, $ext)
+	protected function _out($file, $ext)
 	{
-		$dir = realpath($this->_config['dir']).DIRECTORY_SEPARATOR;
-			
-		return $dir.$this->_hash($files).'.'.$ext;
+		return realpath($this->_config['dir']).DIRECTORY_SEPARATOR.$file.'.'.$ext;
 	}
 
 	/**

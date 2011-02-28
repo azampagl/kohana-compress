@@ -123,7 +123,8 @@ If you use relative paths, url::base(TRUE, TRUE) will be prepended to the file n
 ## Notes
 
 * If you don't have java on your web server (shared hosting), use the Closure Service compiler.
-* Dependencies matter!  Make sure to place things like jquery.js before jquery.ui.js; array('jquery.js', jquery.ui.js'). 
+* Dependencies matter!  Make sure to place things like jquery.js before jquery.ui.js; array('jquery.js', jquery.ui.js').
+* If you switch 'gc' on/off, make sure to clean the cache before execution.
 
 
 ## Links
