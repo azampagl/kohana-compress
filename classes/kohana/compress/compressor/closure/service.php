@@ -15,6 +15,9 @@ abstract class Kohana_Compress_Compressor_Closure_Service extends Compress_Compr
 	 */
 	public function compress(array $files, $out, array $args = NULL)
 	{
+		if ($args['type'] == 'css')
+			throw new Compress_Exception("Closure Compiler does not support stylesheets.");
+
 		for ($i = 0; $i < count($files); $i++)
 		{
 			// If HTTP(S) wasn't included, it was a local file

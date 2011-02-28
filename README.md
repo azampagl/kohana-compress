@@ -6,7 +6,7 @@ Compress module built for the Kohana PHP framework.  This will compress multiple
 ## Requirements
 
 - PHP 5.2+
-- Kohana PHP 3.x (read the docs!)
+- Kohana PHP 3.1 (read the docs!)
 
 
 ## Setup
@@ -78,7 +78,17 @@ URL address of the closure service?  Shouldn't have to be modified.
 
 		'compilation_level' => 'SIMPLE_OPTIMIZATIONS',
 
-What level of compilation should be used?  Read Closure documentation!
+What level of compilation should be used?  Read the Closure documentation!
+
+#### cssmin
+
+		'exe' => 'vendor/cssmin/cssmin.php',
+
+What is the location of the cssmin.php file?
+
+		'options' => array( ... ),
+
+Are there any additional options for cssmin?  Read the cssmin documentation!
 
 
 ## Usage
@@ -111,12 +121,12 @@ Stylesheets work the same way.
 
 Many shared hosts do not provide java, so the Google Closure Service is an excellent alternative for compression.  In the module, you can either pass the full url to the javascript file or a relative url (regardless, make sure it is available via HTTP/HTTPS).
 
-		$result = Compress::instance('closure')->scripts(array('http://mysite.com/media/js1.js', 'http://mysite.com/media/js2.js'));
+		$result = Compress::instance('javascripts')->scripts(array('http://mysite.com/media/js1.js', 'http://mysite.com/media/js2.js'));
 		echo implode("\n", array_map('HTML::script', $result)), "\n";
 
 If you use relative paths, url::base(TRUE, TRUE) will be prepended to the file names.
 
-		$result = Compress::instance('closure')->scripts(array('media/js1.js', 'media/js2.js'));
+		$result = Compress::instance('javascripts')->scripts(array('media/js1.js', 'media/js2.js'));
 		echo implode("\n", array_map('HTML::script', $result)), "\n";
 
 
@@ -138,3 +148,5 @@ If you use relative paths, url::base(TRUE, TRUE) will be prepended to the file n
 [Yahoo's YUI Compressor](http://developer.yahoo.com/yui/compressor/)
 
 [Google's Closure Compressor](http://code.google.com/closure/compiler/docs/overview.html)
+
+[cssmin](http://code.google.com/p/cssmin/)

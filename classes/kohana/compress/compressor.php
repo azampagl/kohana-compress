@@ -34,28 +34,32 @@ abstract class Kohana_Compress_Compressor {
 	abstract public function compress(array $files, $out, array $args = NULL);
 
 	/**
-	 * Compacts all of the files into a temp one
-	 * for later compression.
+	 * Compacts all of the files.  Places
+	 * contents into tmp file if requested.
 	 *
 	 * @param   array   files
-	 * @return  string
+	 * @param   boolean tmp file?
+	 * @return  mixed
 	 */
-	protected function _compact(array $files)
+	protected function _compact(array $files, $tmp = FALSE)
 	{
-		$name = tempnam(sys_get_temp_dir(), strval(time()));
-
-		$tmp = fopen($name, "a");
+		$contents = "";
 
 		foreach ($files as $file)
 		{
-			$handle = fopen($file, "r");
-			fwrite($tmp, fread($handle, filesize($file)));
-			fclose($handle);
+			$contents .= file_get_contents($file);
 		}
 
-		fclose($tmp);
+		if ($tmp)
+		{
+			$name = tempnam(sys_get_temp_dir(), strval(time()));
 
-		return $name;
+			file_put_contents($name, $contents);
+
+			return $name;
+		}
+
+		return $contents;
 	}
 
 } // End Kohana_Compress_Compressor

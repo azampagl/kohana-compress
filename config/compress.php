@@ -11,7 +11,7 @@ return array
 		'filemtime'		=> TRUE,
 		'compressor'	=> 'yui',
 	),
-	'closure' => array
+	'javascripts' => array
 	(
 		'force_exec'	=> FALSE,
 		'root'			=> DOCROOT,
@@ -19,5 +19,14 @@ return array
 		'gc'			=> TRUE,
 		'filemtime'		=> TRUE,
 		'compressor'	=> 'closure_service',
+	),
+	'stylesheets' => array
+	(
+		'force_exec'	=> FALSE,
+		'root'			=> DOCROOT,
+		'dir'			=> DOCROOT.'media/cache',
+		'gc'			=> TRUE,
+		'filemtime'		=> TRUE,
+		'compressor'	=> 'cssmin',
 	),
 );
