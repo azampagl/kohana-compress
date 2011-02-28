@@ -7,7 +7,7 @@
  * @author     azampagl
  * @license    ISC
  */
-abstract class Compress_Compressor_Core {
+abstract class Kohana_Compress_Compressor {
 
 	// Config
 	protected $_config;
@@ -58,4 +58,4 @@ abstract class Compress_Compressor_Core {
 		return $name;
 	}
 
-} // End Compress_Compressor_Core
+} // End Kohana_Compress_Compressor

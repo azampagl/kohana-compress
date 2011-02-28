@@ -13,7 +13,7 @@
  * @author     azampagl
  * @license    ISC
  */
-abstract class Compress_Core {
+abstract class Kohana_Compress {
 
 	// Cache key
 	const CACHE_KEY = 'kohana-compress-cache';
@@ -250,4 +250,4 @@ abstract class Compress_Core {
 		return $this->_execute($files, $out, array('type' => 'css'));
 	}
 
-} // End Compress_Core
+} // End Kohana_Compress

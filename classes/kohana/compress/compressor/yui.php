@@ -8,7 +8,7 @@
  * @author     azampagl
  * @license    ISC
  */
-abstract class Compress_Compressor_Yui_Core extends Compress_Compressor {
+abstract class Kohana_Compress_Compressor_Yui extends Compress_Compressor {
 
 	/**
 	 * @see  parent
@@ -38,4 +38,4 @@ abstract class Compress_Compressor_Yui_Core extends Compress_Compressor {
 		exec($cmd);
 	}
 
-} // End Compress_Compressor_Yui_Core
+} // End Kohana_Compress_Compressor_Yui

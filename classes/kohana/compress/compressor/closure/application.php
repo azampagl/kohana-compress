@@ -8,7 +8,7 @@
  * @author     azampagl
  * @license    ISC
  */
-abstract class Compress_Compressor_Closure_Application_Core extends Compress_Compressor {
+abstract class Kohana_Compress_Compressor_Closure_Application extends Compress_Compressor {
 
 	/**
 	 * @see  parent
@@ -33,4 +33,4 @@ abstract class Compress_Compressor_Closure_Application_Core extends Compress_Com
 		exec($cmd);
 	}
 
-} // End Compress_Compressor_Closure_Application_Core
+} // End Kohana_Compress_Compressor_Closure_Application
