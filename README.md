@@ -42,7 +42,7 @@ Use file mod times when determining if the files need to be compressed?  If this
 
 		'compressor' => 'yui',
 
-Which compressor to use?  YUI is able to compress javascript and stylesheet files, so it is used by default.  Google Closure (application and service) are implemented as well, and has been known to have a higher compression ratio than YUI (doesn't support stylesheets, though).
+Which compressor to use?  YUI is able to compress javascript and stylesheet files, so it is used by default.  Google Closure (application and service) is implemented as well, and has been known to have a higher compression ratio than YUI (doesn't support stylesheets).
 
 ### Compressors (config/compress/compressors.php)
 
