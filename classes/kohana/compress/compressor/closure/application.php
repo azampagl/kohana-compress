@@ -15,6 +15,9 @@ abstract class Kohana_Compress_Compressor_Closure_Application extends Compress_C
 	 */
 	public function compress(array $files, $out, array $args = NULL)
 	{
+		if ($args['type'] == 'css')
+			throw new Compress_Exception("Closure Compiler does not support stylesheets.");
+
 		// Find our jar file
 		$jar = Kohana::find_file(dirname($this->_config['jar']), basename($this->_config['jar'], '.jar'), 'jar');
 
