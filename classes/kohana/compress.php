@@ -108,55 +108,49 @@ abstract class Kohana_Compress {
 	 * @param   array    files to be compressed
 	 * @param   string   desired out file name
 	 * @param   array    additional params
-	 * @return  array
+	 * @return  string
 	 */
 	protected function _execute(array $files, $out, array $args)
 	{
-		if ($this->_config['force_exec'] OR Kohana::$environment == Kohana::PRODUCTION)
+		// Get cache
+		$cache = Compress::_cache();
+
+		// Hash just the file names for a key
+		$key = $this->_hash($files, FALSE);
+
+		// If it's cached, don't re-process
+		if (isset($cache[$key]) AND ! $this->_config['gc'])
+			return $this->_format($cache[$key]);
+
+		// Determine output file path
+		if ($out == NULL)
 		{
-			// Get cache
-			$cache = Compress::_cache();
-
-			// Hash just the file names for a key
-			$key = $this->_hash($files, FALSE);
-
-			// If it's cached, don't re-process
-			if (isset($cache[$key]) AND ! $this->_config['gc'])
-				return array($this->_format($cache[$key]));
-
-			// Determine output file path
-			if ($out == NULL)
+			if ($this->_config['gc'])
 			{
-				if ($this->_config['gc'])
-				{
-					$out = $this->_out($this->_hash($files), $args['type']);
-				}
-				else
-				{
-					$out = $this->_out($key, $args['type']);
-				}
+				$out = $this->_out($this->_hash($files), $args['type']);
 			}
-
-			// GC
-			$gc = ($this->_config['gc'] AND isset($cache[$key]) AND $out != $cache[$key]);
-			if ($gc)
+			else
 			{
-				@unlink($cache[$key]);
+				$out = $this->_out($key, $args['type']);
 			}
-
-			// Compress if new or if GC
-			if ((! isset($cache[$key])) OR $gc)
-			{
-				$this->_compressor->compress($files, $out, $args);
-				$cache[$key] = $out;
-				Compress::_cache($cache);
-			}
-
-			return array($this->_format($out));
 		}
 
-		// Not in production, return the files as-is.
-		return $files;
+		// GC
+		$gc = ($this->_config['gc'] AND isset($cache[$key]) AND $out != $cache[$key]);
+		if ($gc)
+		{
+			@unlink($cache[$key]);
+		}
+
+		// Compress if new or if GC
+		if ((! isset($cache[$key])) OR $gc)
+		{
+			$this->_compressor->compress($files, $out, $args);
+			$cache[$key] = $out;
+			Compress::_cache($cache);
+		}
+
+		return $this->_format($out);
 	}
 
 	/**
@@ -231,7 +225,7 @@ abstract class Kohana_Compress {
 	 *
 	 * @param   array    files to be compressed
 	 * @param   string   desired out file name [optional]
-	 * @return  array
+	 * @return  string
 	 */
 	public function scripts(array $files, $out = NULL)
 	{
@@ -243,7 +237,7 @@ abstract class Kohana_Compress {
 	 *
 	 * @param   array    files to be compressed
 	 * @param   string   desired out file name [optional]
-	 * @return  array
+	 * @return  string
 	 */
 	public function styles(array $files, $out = NULL)
 	{
