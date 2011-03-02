@@ -12,17 +12,12 @@ Compress module built for the Kohana PHP framework.  Compresses multiple media f
 ## Setup
 
 - Enable the compress module in Kohana's bootstrap file.
-- Properly set the Kohana::$environment variable in the bootstrap file.
 - Create a writable folder for the compressed files.
 
 
 ## Configuration
 
 ### Core (config/compress.php)
-
-		'force_exec' => FALSE,
-
-Force execution (compress files) regardless of the Kohana::$environment?
 
 		'root' => DOCROOT,
 
@@ -95,35 +90,40 @@ Are there any additional options for cssmin?  Read the cssmin documentation!
 
 ### Normal
 
-If the Kohana::$environment variable is set to something other than Kohana::PRODUCTION and 'force_exec' is set to FALSE, the files sent will be immediately returned.  The result of both Compress::scripts() and Compress::styles() will always be an array.
-
 A typical use case would be to provide the media files that you need to be compressed.  An output file will be generated for you.
 
 		$result = Compress::instance()->scripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'));
-		echo implode("\n", array_map('HTML::script', $result)), "\n";
+		// E.g. <script type="text/javascript" src="/media/cache/0a21d9d23a9fa5e19ea62a49dd5cd85680a2c63f.js">
+		echo HTML::script($result);
 
 You can also choose a custom output file.  If an absolute path is not provided, the out file will be put relative to the DOCROOT (where index.php is).
 
 		$result = Compress::instance()->scripts(array('media/js/jquery.js', 'media/js/jquery.ui.js', 'media/js/my-scripts.js'), 'out.js');
-		echo implode("\n", array_map('HTML::script', $result)), "\n";
+		// E.g. <script type="text/javascript" src="/out.js">
+		echo HTML::script($result);
 
 Stylesheets work the same way.
 
 		$result = Compress::instance()->styles(array('media/css/reset.css', 'media/css/main.css'));
-		echo implode("\n", array_map('HTML::style', $result)), "\n";
+		echo HTML::style($result);
 
 ### Google Closure Service and cssmin
 
-Many shared hosts do not provide java, so 'Google Closure Service' and 'cssmin' are excellent alternatives for javascript and stylesheet compression, respectively.  In the module, you can either pass the full url to the file or a relative url (regardless, make sure it is available via HTTP/HTTPS).
+Many shared hosts do not provide java, so Google Closure Service and cssmin are excellent alternatives for javascript and stylesheet compression, respectively.  When using Google Closure Service, pass either the full url to the file or a relative url (regardless, make sure it is available via HTTP/HTTPS).
 
 		$result = Compress::instance('javascripts')->scripts(array('http://mysite.com/media/js1.js', 'http://mysite.com/media/js2.js'));
-		echo implode("\n", array_map('HTML::script', $result)), "\n";
+		echo HTML::script($result);
 
 If you use relative paths, url::base(TRUE, TRUE) will be prepended to the file names.
 
 		$result = Compress::instance('javascripts')->scripts(array('media/js1.js', 'media/js2.js'));
-		echo implode("\n", array_map('HTML::script', $result)), "\n";
+		echo HTML::script($result);
 
+When using cssmin, make sure it is a path relative to the web server.
+
+		$result = Compress::instance('stylesheets')->styles(array('media/css1.css', 'media/css2.css'));
+		
+		echo HTML::style($result);
 
 ## Notes
 

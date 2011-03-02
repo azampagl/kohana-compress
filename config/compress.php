@@ -4,7 +4,6 @@ return array
 (
 	'default' => array
 	(
-		'force_exec'	=> FALSE,
 		'root'			=> DOCROOT,
 		'dir'			=> DOCROOT.'media/cache',
 		'gc'			=> TRUE,
@@ -13,7 +12,6 @@ return array
 	),
 	'javascripts' => array
 	(
-		'force_exec'	=> FALSE,
 		'root'			=> DOCROOT,
 		'dir'			=> DOCROOT.'media/cache',
 		'gc'			=> TRUE,
@@ -22,7 +20,6 @@ return array
 	),
 	'stylesheets' => array
 	(
-		'force_exec'	=> FALSE,
 		'root'			=> DOCROOT,
 		'dir'			=> DOCROOT.'media/cache',
 		'gc'			=> TRUE,
