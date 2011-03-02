@@ -36,10 +36,14 @@ abstract class Kohana_Compress_Compressor_Closure_Service extends Compress_Compr
 			'output_format'		=> 'text',
 			'output_info'		=> 'compiled_code',
 		);
-
-		$response = Request::factory($this->_config['url'])
+		
+		// Play nice with http
+		$post = preg_replace('/%5B(?:[0-9]|[1-9][0-9]+)%5D=/', '=', http_build_query($post));
+		
+		$response = Request::factory('http://closure-compiler.appspot.com/compile')
+			->headers('content-type', 'application/x-www-form-urlencoded')
 			->method(HTTP_Request::POST)
-			->post($post)
+			->body($post)
 			->execute();
 
 		file_put_contents($out, $response);
