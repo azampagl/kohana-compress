@@ -5,7 +5,7 @@ return array
 	'yui'					=> array
 	(
 		'java'				=> 'java',
-		'jar'				=> 'vendor/yui/yui.jar',
+		'jar'				=> 'vendor/yui/yuicompressor-2.4.6.jar',
 	),
 	'closure_application'	=> array
 	(
