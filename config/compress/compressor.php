@@ -20,7 +20,7 @@ return array
 	),
 	'cssmin'				=> array
 	(
-		'exe'				=> 'vendor/cssmin/cssmin.php',
+		'exe'				=> 'vendor/cssmin/cssmin-v3.0.1-minified.php',
 		'options'			=> array
 		(
 			"remove-empty-blocks"			=> TRUE,
