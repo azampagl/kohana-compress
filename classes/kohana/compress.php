@@ -58,16 +58,20 @@ abstract class Kohana_Compress {
 	/**
 	 * Singleton instance of the class.
 	 *
-	 * @param   string   name of the instance to load
+	 * @param   string            name of the instance to load
+	 * @param   array [optional]  in-line configuration
 	 * @return  Compress
 	 */
-	public static function instance($name = 'default')
+	public static function instance($name = 'default', array $config = NULL)
 	{
 		// Check if we already made this instance
 		if ( ! isset(Compress::$_instances[$name]))
 		{
-			// Load the config
-			$config = Kohana::$config->load('compress')->$name;
+			if ($config !== NULL)
+			{
+				// Load the config
+				$config = Kohana::$config->load('compress')->$name;
+			}
 
 			// Create a new Compress instance
 			Compress::$_instances[$name] = new Compress($config);
