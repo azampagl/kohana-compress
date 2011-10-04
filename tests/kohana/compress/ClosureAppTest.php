@@ -17,7 +17,14 @@ class Kohana_Compress_ClosureAppTest extends Kohana_Compress_JavascriptTest
 	public function provider_instances()
 	{
 		return array(
-			Compress::instance('default')
+			Compress::instance('test_closure_app_1', array(
+				'root'			=> DOCROOT,
+				'dir'			=> DOCROOT.'media/cache',
+				'gc'			=> TRUE,
+				'filemtime'		=> TRUE,
+				'compressor'	=> 'closure_application',
+				)
+			),
 		);
 	}
 }

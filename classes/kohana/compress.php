@@ -67,7 +67,7 @@ abstract class Kohana_Compress {
 		// Check if we already made this instance
 		if ( ! isset(Compress::$_instances[$name]))
 		{
-			if ($config !== NULL)
+			if ($config === NULL)
 			{
 				// Load the config
 				$config = Kohana::$config->load('compress')->$name;
