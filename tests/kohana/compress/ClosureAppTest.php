@@ -12,10 +12,8 @@ include_once(Kohana::find_file('tests/kohana/compress', 'JavascriptTest'));
 class Kohana_Compress_ClosureAppTest extends Kohana_Compress_JavascriptTest
 {
 	/**
-	* Provides compress instance.
-	*
-	* @return Compress
-	*/
+	 * @see parent
+	 */
 	public function provider_instances()
 	{
 		return array(

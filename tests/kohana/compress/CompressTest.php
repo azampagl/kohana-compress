@@ -11,6 +11,20 @@
 abstract class Kohana_Compress_CompressTest extends PHPUnit_Framework_TestCase
 {
 	/**
+	 * Provides "data" which is an instance and the args to send. 
+	 * 
+	 * @return array
+	 */
+	abstract public function provider_data();
+	
+	/**
+	 * Returns compress instances.
+	 * 
+	 * @return array
+	 */
+	abstract public function provider_instances();
+	
+	/**
 	 * Tests true.
 	 * 
 	 * @test

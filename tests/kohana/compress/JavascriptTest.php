@@ -12,9 +12,7 @@ include_once(Kohana::find_file('tests/kohana/compress', 'CompressTest'));
 abstract class Kohana_Compress_JavascriptTest extends Kohana_Compress_CompressTest
 {
 	/**
-	 * Provides "data" which is an instance and the args to send. 
-	 * 
-	 * @return array
+	 * @see parent
 	 */
 	public function provider_data()
 	{
@@ -34,7 +32,7 @@ abstract class Kohana_Compress_JavascriptTest extends Kohana_Compress_CompressTe
 			}
 		}
 		
-		return data;
+		return $data;
 	}
 	
 	/**
