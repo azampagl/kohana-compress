@@ -67,7 +67,7 @@ abstract class Kohana_Compress {
 		if ( ! isset(Compress::$_instances[$name]))
 		{
 			// Load the config
-			$config = Kohana::config('compress')->$name;
+			$config = Kohana::$config->load('compress')->$name;
 
 			// Create a new Compress instance
 			Compress::$_instances[$name] = new Compress($config);
@@ -98,7 +98,7 @@ abstract class Kohana_Compress {
 
 		// What type of compressor?
 		$compressor = 'Compress_Compressor_'.$config['compressor'];
-		$compressor_config = Kohana::config('compress/compressor')->{$config['compressor']};
+		$compressor_config = Kohana::$config->load('compress/compressor')->{$config['compressor']};
 		$this->_compressor = new $compressor($compressor_config);
 	}
 
