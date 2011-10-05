@@ -1,5 +1,4 @@
 ## [Compress]()
-- [About](index)
 - [Requirements](reqs)
 - [Setup](setup)
 - [Configuration](config)

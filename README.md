@@ -6,13 +6,13 @@ Compress module built for the Kohana PHP framework.  Compresses multiple media f
 ## Requirements
 
 - PHP 5.2+
-- Kohana PHP 3.1 (read the docs!)
+- Kohana PHP 3.2 (read the docs!)
 
 
 ## Setup
 
 - Enable the compress module in Kohana's bootstrap file.
-- Create a writable folder for the compressed files.
+- Create a writable folder for the compressed files (i.e. DOCROOT/media/cache).
 
 
 ## Configuration
@@ -107,6 +107,11 @@ Stylesheets work the same way.
 		$result = Compress::instance()->styles(array('media/css/reset.css', 'media/css/main.css'));
 		echo HTML::style($result);
 
+If you want to provide your own in-line configuration, you can pass it as a second parameter to the instance methods.  Just make sure it follows the same format as the configuration files provided!
+
+		$result = Compress::instance('my_custom_config', array('root' => DOCROOT, ...))->scripts(array('http://mysite.com/media/js1.js', 'http://mysite.com/media/js2.js'));
+		echo HTML::script($result);
+
 ### Google Closure Service and cssmin
 
 Many shared hosts do not provide java, so Google Closure Service and cssmin are excellent alternatives for javascript and stylesheet compression, respectively.  When using Google Closure Service, pass either the full url to the file or a relative url (regardless, make sure it is available via HTTP/HTTPS).
@@ -129,7 +134,7 @@ When using cssmin, make sure it is a path relative to the web server.
 
 * If you don't have java on your web server (shared hosting), use the Closure Compiler Service and cssmin.
 * Dependencies matter!  Make sure to place things like jquery.js before jquery.ui.js; array('jquery.js', jquery.ui.js').
-* If you switch 'gc' on/off, make sure to clean the cache (application/cache and wherever the compressed files are being stored) before execution.
+* If you switch 'gc' on/off, make sure to clean the cache (application/cache and wherever the compressed files are being stored, i.e. DOCROOT/media/cache) before execution.
 
 
 ## Links
