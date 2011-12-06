@@ -22,7 +22,28 @@ abstract class Kohana_Compress_CompressTest extends PHPUnit_Framework_TestCase
 	 * 
 	 * @return array
 	 */
-	abstract public function provider_data();
+	public function provider_data()
+	{
+		$data = array();
+		
+		$instances = $this->provider_instances();
+		$method = $this->provider_method();
+		$args = $this->provider_args();
+		
+		foreach ($instances as $instance)
+		{
+			foreach ($args as $arg)
+			{
+				$data[] = array(
+					$instance,
+					$method,
+					$arg
+				);
+			}
+		}
+		
+		return $data;
+	}
 	
 	/**
 	 * Returns compress instances.
@@ -32,18 +53,46 @@ abstract class Kohana_Compress_CompressTest extends PHPUnit_Framework_TestCase
 	abstract public function provider_instances();
 	
 	/**
+	* Returns the compress method.
+	*
+	* @return string
+	*/
+	abstract public function provider_method();
+	
+	/**
 	 * Tests true.
 	 * 
 	 * @test
 	 * @dataProvider provider_data
 	 * 
 	 * @param  Compress  compress instance
-	 * @param  array     input data
+	 * @param  string    method
+	 * @param  array     parameters
 	 */
-	public function test_true($instance, $input)
+	public function test_compress($instance, $method, $args)
 	{
-		print_r($instance);
-		print_r($input);
-		$this->assertTrue(TRUE);
+		$result = NULL;
+		if (Arr::get($args, 'output'))
+		{
+			$result = $instance->$method($args['input'], $args['output']);
+		}
+		else
+		{
+			$result = $instance->$method($args['input']);
+		}
+		
+		$input_size = 0.0;
+		foreach ($args['input'] as $input)
+		{
+			$input_size += filesize($input);
+		}
+		
+		$output_size = filesize($result);
+		
+		// Let's assert that the size of the output file is smaller than the original.
+		$this->assertTrue($output_size > 0 AND $output_size <= $input_size);
+		
+		// Remove the output file.
+		unlink($result);
 	}
 }
