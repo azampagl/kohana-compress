@@ -6,7 +6,7 @@ Compress module built for the Kohana PHP framework.  Compresses multiple media f
 ## Requirements
 
 - PHP 5.2+
-- Kohana PHP 3.2 (read the docs!)
+- Kohana PHP 3.3.x (read the docs!)
 
 
 ## Setup

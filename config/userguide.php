@@ -17,7 +17,7 @@ return array(
 			'description' => 'Dynamic static file compression.',
 			
 			// Copyright message, shown in the footer for this module
-			'copyright' => '&copy; 2011 Aaron Zampaglione',
+			'copyright' => '&copy; 2011 - 2012 Aaron Zampaglione',
 		)	
 	)
 );
