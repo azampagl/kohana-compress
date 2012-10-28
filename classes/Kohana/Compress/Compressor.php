@@ -6,6 +6,7 @@
  * @package    Compress
  * @author     azampagl
  * @license    ISC
+ * @copyright  (c) 2011 - 2012 Aaron Zampaglione
  */
 abstract class Kohana_Compress_Compressor {
 

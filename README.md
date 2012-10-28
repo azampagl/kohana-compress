@@ -136,6 +136,9 @@ When using cssmin, make sure it is a path relative to the web server.
 * Dependencies matter!  Make sure to place things like jquery.js before jquery.ui.js; array('jquery.js', jquery.ui.js').
 * If you switch 'gc' on/off, make sure to clean the cache (application/cache and wherever the compressed files are being stored, i.e. DOCROOT/media/cache) before execution.
 
+## License
+ISC
+(c) Copyright 2011 - 2012 Aaron Zampaglione
 
 ## Links
 

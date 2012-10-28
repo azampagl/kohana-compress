@@ -3,3 +3,4 @@
 - [Setup](setup)
 - [Configuration](config)
 - [Usage](usage)
+- [License](license)
