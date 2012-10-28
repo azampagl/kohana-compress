@@ -8,7 +8,7 @@
  * @copyright  (c) 2011 Aaron Zampaglione
  * @license    ISC
  */
-abstract class Kohana_Compress_CompressTest extends PHPUnit_Framework_TestCase
+abstract class Kohana_Compress_CompressTest extends Unittest_TestCase
 {
 	/**
 	* Provides the args sent to the respective methods.
@@ -71,27 +71,31 @@ abstract class Kohana_Compress_CompressTest extends PHPUnit_Framework_TestCase
 	 */
 	public function test_compress($instance, $method, $args)
 	{
+		// Clear out the cache.
+		Kohana::cache(Compress::CACHE_KEY, array());
+
 		$result = NULL;
 		if (Arr::get($args, 'output'))
 		{
-			$result = $instance->$method($args['input'], $args['output']);
+			$instance->$method($args['input'], $args['output']);
+			$result = Arr::get($args, 'output');
 		}
 		else
 		{
 			$result = $instance->$method($args['input']);
+			$result = DOCROOT.$result;
 		}
-		
+
 		$input_size = 0.0;
 		foreach ($args['input'] as $input)
 		{
 			$input_size += filesize($input);
 		}
-		
+
 		$output_size = filesize($result);
-		
 		// Let's assert that the size of the output file is smaller than the original.
 		$this->assertTrue($output_size > 0 AND $output_size <= $input_size);
-		
+
 		// Remove the output file.
 		unlink($result);
 	}

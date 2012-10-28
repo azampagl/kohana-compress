@@ -7,10 +7,7 @@
 
 	Any options you specify when calling phpunit will override the ones in here
 -->
-<php>
-	<includePath>./kohana/compress</includePath>
-</php>
-<phpunit colors="true" bootstrap="/path/to/your/unittest/bootstrap.php">
+<phpunit colors="true" bootstrap="../../unittest/bootstrap.php">
 	<testsuites>
 		<testsuite name="Kohana Compress Tests">
 			<directory suffix=".php">kohana/compress/</directory>
