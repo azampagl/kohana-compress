@@ -41,3 +41,7 @@ When using cssmin, make sure it is a path relative to the web server.
 		$result = Compress::instance('stylesheets')->styles(array('media/css1.css', 'media/css2.css'));
 		
 		echo HTML::style($result);
+
+### UglifyJS
+
+You will need to install UglifyJS on your server to use it in this module. See [http://lisperator.net/uglifyjs/](http://lisperator.net/uglifyjs/)
