@@ -39,4 +39,8 @@ return array
 			"import-remove-invalid"			=> FALSE
 		),
 	),
+	'uglifyjs' => array
+	(
+		'cmd' => 'uglifyjs'
+	),
 );
