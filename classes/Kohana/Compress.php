@@ -162,7 +162,7 @@ abstract class Kohana_Compress {
 		$gc = ($this->_config['gc'] AND isset($cache[$key]) AND $out != $cache[$key]);
 		if ($gc)
 		{
-			unlink($cache[$key]);
+			@unlink($cache[$key]);
 		}
 
 		// Compress if new or if old (modified) was garbage collected.
