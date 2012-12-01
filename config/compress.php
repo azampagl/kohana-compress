@@ -8,6 +8,7 @@ return array
 		'dir'			=> DOCROOT.'media/cache',
 		'gc'			=> TRUE,
 		'filemtime'		=> TRUE,
+		'cache'			=> TRUE,
 		'compressor'	=> 'yui',
 	),
 	'javascripts' => array
@@ -16,6 +17,7 @@ return array
 		'dir'			=> DOCROOT.'media/cache',
 		'gc'			=> TRUE,
 		'filemtime'		=> TRUE,
+		'cache'			=> TRUE,
 		'compressor'	=> 'closure_service',
 	),
 	'stylesheets' => array
@@ -24,6 +26,7 @@ return array
 		'dir'			=> DOCROOT.'media/cache',
 		'gc'			=> TRUE,
 		'filemtime'		=> TRUE,
+		'cache'			=> TRUE,
 		'compressor'	=> 'cssmin',
 	),
 );

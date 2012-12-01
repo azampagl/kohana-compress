@@ -138,8 +138,8 @@ abstract class Kohana_Compress {
 		// Hash just the file names for a cache key.
 		$key = $this->_hash($files, FALSE);
 
-		// If it's cached, don't re-process.
-		if (isset($cache[$key]) AND ! $this->_config['gc'])
+		// If cache is enabled, and it's cached, don't re-process.
+		if ($this->_config['cache'] AND isset($cache[$key]) AND ! $this->_config['gc'])
 			return $this->_format($cache[$key]);
 
 		// Determine output file path.
@@ -166,8 +166,12 @@ abstract class Kohana_Compress {
 		if (( ! isset($cache[$key])) OR $gc)
 		{
 			$this->_compressor->compress($files, $out, $args);
-			$cache[$key] = $out;
-			Compress::_cache($cache);
+
+			if ($this->_config['cache'])
+			{
+				$cache[$key] = $out;
+				Compress::_cache($cache);	
+			}
 		}
 
 		return $this->_format($out);
