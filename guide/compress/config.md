@@ -72,4 +72,4 @@ Are there any additional options for cssmin?  Read the cssmin documentation!
 
 		'cmd' => 'uglifyjs',
 
-What is the UglifyJS cmd?
+The location to the uglifyjs binary.  Either add the absolute path, or add uglifyjs to your PATH variable.

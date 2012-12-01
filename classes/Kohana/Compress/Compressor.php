@@ -6,18 +6,23 @@
  * @package    Compress
  * @author     azampagl
  * @license    ISC
- * @copyright  (c) 2011 - 2012 Aaron Zampaglione
+ * @copyright  (c) 2011 - Present Aaron Zampaglione <azampagl@azampagl.com>
  */
 abstract class Kohana_Compress_Compressor {
 
-	// Config
+	/**
+	 * Configuration for $this instance.
+	 *
+	 * @var array
+	 */
 	protected $_config;
 
 	/**
 	 * Sets the config.
 	 *
-	 * @param   array   config
-	 * @return  Compress_Compressor_*
+	 * @param  array
+	 *   Config
+	 * @return Compress_Compressor_*
 	 */
 	public function __construct($config)
 	{
@@ -27,10 +32,12 @@ abstract class Kohana_Compress_Compressor {
 	/**
 	 * Generate compressed file.
 	 *
-	 * @param   array    files to be compressed
-	 * @param   string   desired out file (absolute path)
-	 * @param   array    additional arguments
-	 * @return  void
+	 * @param  array
+	 *   Files to be compressed.
+	 * @param  string
+	 *   Desired out file (absolute path).
+	 * @param  array
+	 *   Additional arguments.
 	 */
 	abstract public function compress(array $files, $out, array $args = NULL);
 
@@ -38,9 +45,13 @@ abstract class Kohana_Compress_Compressor {
 	 * Compacts all of the files.  Places
 	 * contents into tmp file if requested.
 	 *
-	 * @param   array   files
-	 * @param   boolean tmp file?
-	 * @return  mixed
+	 * @param  array
+	 *   Files to be compacted.
+	 * @param  boolean
+	 *   Should a tmp file be used?
+	 * @return string
+	 *   The name of the tmp file to store compacted files
+	 *   or the contents of the compacted files.
 	 */
 	protected function _compact(array $files, $tmp = FALSE)
 	{
