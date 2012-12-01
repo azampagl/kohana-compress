@@ -41,6 +41,12 @@ return array
 	),
 	'uglifyjs' => array
 	(
-		'cmd' => 'uglifyjs'
+		'cmd' => 'uglifyjs',
+		'node_dir' => '/usr/local/bin',
+		'uglifyjs_dir' => '/usr/local/share/npm/bin',
+		'options' => array
+		(
+			'ascii' => ''
+		)
 	),
 );
