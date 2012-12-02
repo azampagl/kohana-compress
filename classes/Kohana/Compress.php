@@ -138,41 +138,34 @@ abstract class Kohana_Compress {
 		// Hash just the file names for a cache key.
 		$key = $this->_hash($files, FALSE);
 
-		// If cache is enabled, and it's cached, don't re-process.
-		if ($this->_config['cache'] AND isset($cache[$key]) AND ! $this->_config['gc'])
-			return $this->_format($cache[$key]);
-
 		// Determine output file path.
 		if ($out == NULL)
 		{
+			// If gc is on, determine the hash with the filemtimes.
 			if ($this->_config['gc'])
 			{
 				$out = $this->_out($this->_hash($files), $args['type']);
 			}
+			// Otherwise, the out file name is just the hash key.
 			else
 			{
 				$out = $this->_out($key, $args['type']);
 			}
 		}
 
+		// If output file is the same, just return the formatted output.
+		if (isset($cache[$key]) AND $out == $cache[$key])
+			return $this->_format($cache[$key]);
+
 		// Check if we need to garbage collect the old file.
-		$gc = ($this->_config['gc'] AND isset($cache[$key]) AND $out != $cache[$key]);
-		if ($gc)
+		if ($this->_config['gc'] AND isset($cache[$key]) AND $out != $cache[$key])
 		{
 			@unlink($cache[$key]);
 		}
 
-		// Compress if new or if old (modified) was garbage collected.
-		if (( ! isset($cache[$key])) OR $gc)
-		{
-			$this->_compressor->compress($files, $out, $args);
-
-			if ($this->_config['cache'])
-			{
-				$cache[$key] = $out;
-				Compress::_cache($cache);	
-			}
-		}
+		$this->_compressor->compress($files, $out, $args);
+		$cache[$key] = $out;
+		Compress::_cache($cache);
 
 		return $this->_format($out);
 	}
