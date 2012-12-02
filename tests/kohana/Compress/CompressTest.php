@@ -4,9 +4,9 @@
  * compression implementations.
  *
  * @package    Compress
- * @author     Aaron Zampaglione <azampagl@azampagl.com>
- * @copyright  (c) 2011 Aaron Zampaglione
+ * @author     azampagl
  * @license    ISC
+ * @copyright  (c) 2011 - Present Aaron Zampaglione <azampagl@azampagl.com>
  */
 abstract class Kohana_Compress_CompressTest extends Unittest_TestCase
 {
@@ -60,7 +60,7 @@ abstract class Kohana_Compress_CompressTest extends Unittest_TestCase
 	abstract public function provider_method();
 	
 	/**
-	 * Tests true.
+	 * Tests compression.
 	 * 
 	 * @test
 	 * @dataProvider provider_data
@@ -71,7 +71,7 @@ abstract class Kohana_Compress_CompressTest extends Unittest_TestCase
 	 */
 	public function test_compress($instance, $method, $args)
 	{
-		// Clear out the cache.
+		// Clear out the cache...
 		Kohana::cache(Compress::CACHE_KEY, array());
 
 		$result = NULL;
@@ -89,9 +89,11 @@ abstract class Kohana_Compress_CompressTest extends Unittest_TestCase
 		$input_size = 0.0;
 		foreach ($args['input'] as $input)
 		{
+			clearstatcache(TRUE, $input);
 			$input_size += filesize($input);
 		}
 
+		clearstatcache(TRUE, $result);
 		$output_size = filesize($result);
 		// Let's assert that the size of the output file is smaller than the original.
 		$this->assertTrue($output_size > 0 AND $output_size <= $input_size);

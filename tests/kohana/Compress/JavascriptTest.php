@@ -3,9 +3,9 @@
  * Base class for javascript compression tests.
  *
  * @package    Compress
- * @author     Aaron Zampaglione <azampagl@azampagl.com>
- * @copyright  (c) 2011 Aaron Zampaglione
+ * @author     azampagl
  * @license    ISC
+ * @copyright  (c) 2011 - Present Aaron Zampaglione <azampagl@azampagl.com>
  */
 include_once(Kohana::find_file('tests/kohana/compress', 'CompressTest'));
 
@@ -21,17 +21,17 @@ abstract class Kohana_Compress_JavascriptTest extends Kohana_Compress_CompressTe
 		return array(
 			array(
 				'input' => array(
-					Kohana::find_file('tests', 'data/kohana/compress/js/jquery', 'js'),
-					Kohana::find_file('tests', 'data/kohana/compress/js/jqueryui', 'js'),
+					Kohana::find_file('tests', 'data/kohana/compress/js/test1', 'js'),
+					Kohana::find_file('tests', 'data/kohana/compress/js/test2', 'js'),
 				),
+				'output'  => 'kohana-compress-test-out.js',
 			),
 			array(
 				'input' => array(
-					Kohana::find_file('tests', 'data/kohana/compress/js/jquery', 'js'),
-					Kohana::find_file('tests', 'data/kohana/compress/js/jqueryui', 'js'),
+					Kohana::find_file('tests', 'data/kohana/compress/js/test1', 'js'),
+					Kohana::find_file('tests', 'data/kohana/compress/js/test2', 'js'),
 				),
-				'output'  => DOCROOT.'out.js',
-			),
+			),			
 		);
 	}
 	

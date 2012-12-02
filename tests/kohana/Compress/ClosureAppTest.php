@@ -6,9 +6,9 @@
  * so we can't test the service.
  *
  * @package    Compress
- * @author     Aaron Zampaglione <azampagl@azampagl.com>
- * @copyright  (c) 2011 Aaron Zampaglione
+ * @author     azampagl
  * @license    ISC
+ * @copyright  (c) 2011 - Present Aaron Zampaglione <azampagl@azampagl.com>
  */
 include_once(Kohana::find_file('tests/kohana/compress', 'JavascriptTest'));
 
@@ -24,6 +24,30 @@ class Kohana_Compress_ClosureAppTest extends Kohana_Compress_JavascriptTest
 				'root'			=> DOCROOT,
 				'dir'			=> DOCROOT,
 				'gc'			=> TRUE,
+				'filemtime'		=> TRUE,
+				'compressor'	=> 'closure_application',
+				)
+			),
+			Compress::instance('test_closure_app_2', array(
+				'root'			=> DOCROOT,
+				'dir'			=> DOCROOT,
+				'gc'			=> TRUE,
+				'filemtime'		=> FALSE,
+				'compressor'	=> 'closure_application',
+				)
+			),
+			Compress::instance('test_closure_app_3', array(
+				'root'			=> DOCROOT,
+				'dir'			=> DOCROOT,
+				'gc'			=> FALSE,
+				'filemtime'		=> TRUE,
+				'compressor'	=> 'closure_application',
+				)
+			),
+			Compress::instance('test_closure_app_4', array(
+				'root'			=> DOCROOT,
+				'dir'			=> DOCROOT,
+				'gc'			=> FALSE,
 				'filemtime'		=> TRUE,
 				'compressor'	=> 'closure_application',
 				)
