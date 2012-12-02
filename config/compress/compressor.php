@@ -39,4 +39,14 @@ return array
 			"import-remove-invalid"			=> FALSE
 		),
 	),
+	'uglifyjs' => array
+	(
+		'cmd' => 'uglifyjs',
+		'node_dir' => '/usr/local/bin',
+		'uglifyjs_dir' => '/usr/local/share/npm/bin',
+		'options' => array
+		(
+			'ascii' => ''
+		)
+	),
 );

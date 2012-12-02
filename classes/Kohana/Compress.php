@@ -3,29 +3,29 @@
  * Core of the Compress module.  Handles hashing, caching,
  * and the main public methods.
  *
- * Original concept by Jonathan Geiger
+ * Original concept by Jonathan Geiger.
  * @see http://github.com/jonathangeiger
  *
- * Special thanks to Richard Willis for ideas and testing
+ * Special thanks to Richard Willis for ideas and testing.
  * @see http://github.com/badsyntax
  *
  * @package    Compress
  * @author     azampagl
  * @license    ISC
- * @copyright  (c) 2011 - 2012 Aaron Zampaglione
+ * @copyright  (c) 2011 - Present Aaron Zampaglione <azampagl@azampagl.com>
  */
 abstract class Kohana_Compress {
 
-	// Cache key
+	// Cache key.
 	const CACHE_KEY = 'kohana-compress-cache';
 
-	// Cache lifetime
+	// Cache lifetime.
 	const CACHE_LIFETIME = PHP_INT_MAX;
 
-	// Cache
+	// Stores the cache for quick reference.
 	protected static $_cache;
 	
-	// Instances
+	// Stores the difference Compress instances.
 	protected static $_instances = array();
 
 	/**
@@ -33,48 +33,54 @@ abstract class Kohana_Compress {
 	 *
 	 * It is advised that this method be overloaded
 	 * for increased performance if you have Kohana's
-	 * Cache module.
+	 * Cache module enabled.
 	 *
 	 * @see  http://github.com/kohana/cache
 	 *
-	 * @param   array     data to store [optional]
-	 * @return  mixed
+	 * @param  array [optional] 
+	 *   Data to store (set).
+	 * @return mixed
+	 *   An array of the cached items if cache was queried
+	 *   or a boolean if a cache was set.
 	 */
 	protected static function _cache(array $data = NULL)
 	{
-		// Get
+		// Get.
 		if ($data == NULL)
 		{
+			// Quick return the cache instead of calling Kohana::cache.
 			if (isset(Compress::$_cache))
 				return Compress::$_cache;
 
 			return Compress::$_cache = Kohana::cache(Compress::CACHE_KEY, NULL, Compress::CACHE_LIFETIME);
 		}
-		
-		// Set
+
+		// Set.
 		Compress::$_cache = $data;
 		return Kohana::cache(Compress::CACHE_KEY, $data);
 	}
 
 	/**
-	 * Singleton instance of the class.
+	 * Returns a specific instance of the Compress class.
 	 *
-	 * @param   string            name of the instance to load
-	 * @param   array [optional]  in-line configuration
-	 * @return  Compress
+	 * @param  string
+	 *   Name of the instance to load.
+	 * @param  array [optional]
+	 *   In-line configuration
+	 * @return Compress
 	 */
 	public static function instance($name = 'default', array $config = NULL)
 	{
-		// Check if we already made this instance
+		// Check if we already made this instance.
 		if ( ! isset(Compress::$_instances[$name]))
 		{
 			if ($config === NULL)
 			{
-				// Load the config
+				// Load the config.
 				$config = Kohana::$config->load('compress')->$name;
 			}
 
-			// Create a new Compress instance
+			// Create a new Compress instance.
 			Compress::$_instances[$name] = new Compress($config);
 		}
 
@@ -82,26 +88,31 @@ abstract class Kohana_Compress {
 	}
 
 	/**
-	 * @var  array  configuration
+	 * Configuration for $this instance.
+	 *
+	 * @var  array
 	 */
 	protected $_config;
 
 	/**
-	 * @var  Compress_Compressor  compressor
+	 * Actual compressor implementation.
+	 *
+	 * @var  Compress_Compressor
 	 */
 	protected $_compressor;
 
 	/**
 	 * Set config instance and compressor.
 	 *
-	 * @param   Config   config file
-	 * @return  Compress
+	 * @param  Config
+	 *   Kohana config object.
+	 * @return Compress
 	 */
 	protected function __construct($config)
 	{
 		$this->_config = $config;
 
-		// What type of compressor?
+		// Load the specified type of compressor.
 		$compressor = 'Compress_Compressor_'.Text::ucfirst($config['compressor']);
 		$compressor_config = Kohana::$config->load('compress/compressor')->{$config['compressor']};
 		$this->_compressor = new $compressor($compressor_config);
@@ -110,62 +121,64 @@ abstract class Kohana_Compress {
 	/**
 	 * Main execution flow.
 	 *
-	 * @param   array    files to be compressed
-	 * @param   string   desired out file name
-	 * @param   array    additional params
-	 * @return  string
+	 * @param  array
+	 *   Files to be compressed.
+	 * @param  string
+	 *   Desired out file name.
+	 * @param  array
+	 *   Additional params.
+	 * @return string
+	 *   The absolute path to the new file with compressed contents.
 	 */
 	protected function _execute(array $files, $out, array $args)
 	{
-		// Get cache
+		// Get cache.
 		$cache = Compress::_cache();
 
-		// Hash just the file names for a key
+		// Hash just the file names for a cache key.
 		$key = $this->_hash($files, FALSE);
 
-		// If it's cached, don't re-process
-		if (isset($cache[$key]) AND ! $this->_config['gc'])
-			return $this->_format($cache[$key]);
-
-		// Determine output file path
+		// Determine output file path.
 		if ($out == NULL)
 		{
+			// If gc is on, determine the hash with the filemtimes.
 			if ($this->_config['gc'])
 			{
 				$out = $this->_out($this->_hash($files), $args['type']);
 			}
+			// Otherwise, the out file name is just the hash key.
 			else
 			{
 				$out = $this->_out($key, $args['type']);
 			}
 		}
 
-		// GC
-		$gc = ($this->_config['gc'] AND isset($cache[$key]) AND $out != $cache[$key]);
-		if ($gc)
+		// If output file is the same, just return the formatted output.
+		if (isset($cache[$key]) AND $out == $cache[$key])
+			return $this->_format($cache[$key]);
+
+		// Check if we need to garbage collect the old file.
+		if ($this->_config['gc'] AND isset($cache[$key]) AND $out != $cache[$key])
 		{
 			@unlink($cache[$key]);
 		}
 
-		// Compress if new or if GC
-		if ((! isset($cache[$key])) OR $gc)
-		{
-			$this->_compressor->compress($files, $out, $args);
-			$cache[$key] = $out;
-			Compress::_cache($cache);
-		}
+		$this->_compressor->compress($files, $out, $args);
+		$cache[$key] = $out;
+		Compress::_cache($cache);
 
 		return $this->_format($out);
 	}
 
 	/**
-	 * Returns a cleaned out format.
+	 * Returns a cleaned out (url) format.
 	 *
 	 * Cleans the absolute path of out file to a relative
 	 * one that can be used by HTML::*.
 	 *
-	 * @param   string    absolute path of out file
-	 * @return  array
+	 * @param  string
+	 *   Absolute path of out file.
+	 * @return array
 	 */
 	protected function _format($out)
 	{
@@ -178,14 +191,16 @@ abstract class Kohana_Compress {
 	/**
 	 * Determines a unique hash for the files.
 	 *
-	 * The order of the files MATTERS.  Some might
+	 * The order of the files MATTERS.  Some
 	 * files might be dependent on others...  Also,
 	 * if filemtime is set to true in the configuration
 	 * file mod times will be included in the hash.
 	 *
-	 * @param   array    files
-	 * @param   boolean  use filemtime
-	 * @return  string
+	 * @param  array
+	 *   The files that are being compressed.
+	 * @param  boolean
+	 *   Use filemtime.
+	 * @return string
 	 */
 	protected function _hash(array $files, $filemtime = TRUE)
 	{
@@ -216,9 +231,12 @@ abstract class Kohana_Compress {
 	 * Determines the out destination for the new
 	 * compressed file.
 	 *
-	 * @param   string   file
-	 * @param   string   extension
-	 * @return  string
+	 * @param  string
+	 *   File to determine the route of.
+	 * @param  string
+	 *   Extension of the file.
+	 * @return string
+	 *   Absolute path of the compressed file.
 	 */
 	protected function _out($file, $ext)
 	{
@@ -228,9 +246,11 @@ abstract class Kohana_Compress {
 	/**
 	 * Generate compressed javascript.
 	 *
-	 * @param   array    files to be compressed
-	 * @param   string   desired out file name [optional]
-	 * @return  string
+	 * @param  array
+	 *   Files to be compressed.
+	 * @param  string [optional]
+	 *   Desired out file name.
+	 * @return string
 	 */
 	public function scripts(array $files, $out = NULL)
 	{
@@ -240,9 +260,11 @@ abstract class Kohana_Compress {
 	/**
 	 * Generate compressed stylesheet.
 	 *
-	 * @param   array    files to be compressed
-	 * @param   string   desired out file name [optional]
-	 * @return  string
+	 * @param  array
+	 *   Files to be compressed.
+	 * @param  string [optional]
+	 *   Desired out file name.
+	 * @return string
 	 */
 	public function styles(array $files, $out = NULL)
 	{

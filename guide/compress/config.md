@@ -67,3 +67,9 @@ What is the location of the cssmin.php file?
 		'options' => array( ... ),
 
 Are there any additional options for cssmin?  Read the cssmin documentation!
+
+#### UglifyJS
+
+		'cmd' => 'uglifyjs',
+
+The location to the uglifyjs binary.  Either add the absolute path, or add uglifyjs to your PATH variable.

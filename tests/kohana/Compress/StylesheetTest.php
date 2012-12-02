@@ -3,9 +3,9 @@
  * Base class for stylesheet compression tests.
  *
  * @package    Compress
- * @author     Aaron Zampaglione <azampagl@azampagl.com>
- * @copyright  (c) 2011 Aaron Zampaglione
+ * @author     azampagl
  * @license    ISC
+ * @copyright  (c) 2011 - Present Aaron Zampaglione <azampagl@azampagl.com>
  */
 include_once(Kohana::find_file('tests/kohana/compress', 'CompressTest'));
 
@@ -21,16 +21,16 @@ abstract class Kohana_Compress_StylesheetTest extends Kohana_Compress_CompressTe
 		return array(
 			array(
 				'input' => array(
-					Kohana::find_file('tests', 'data/kohana/compress/css/jquerycustom', 'css'),
-					Kohana::find_file('tests', 'data/kohana/compress/css/jqueryall', 'css'),
+					Kohana::find_file('tests', 'data/kohana/compress/css/test1', 'css'),
+					Kohana::find_file('tests', 'data/kohana/compress/css/test2', 'css'),
 				),
 			),
 			array(
 				'input' => array(
-					Kohana::find_file('tests', 'data/kohana/compress/css/jquerycustom', 'css'),
-					Kohana::find_file('tests', 'data/kohana/compress/css/jqueryall', 'css'),
+					Kohana::find_file('tests', 'data/kohana/compress/css/test1', 'css'),
+					Kohana::find_file('tests', 'data/kohana/compress/css/test2', 'css'),
 				),
-				'output'  => DOCROOT.'out.css',
+				'output'  => DOCROOT.'kohana-compress-test-out.css',
 			),
 		);
 	}
