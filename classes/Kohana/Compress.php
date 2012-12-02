@@ -80,9 +80,6 @@ abstract class Kohana_Compress {
 				$config = Kohana::$config->load('compress')->$name;
 			}
 
-			// Backwards compatibility.
-			$config['cache'] = isset($config['cache']) ? $config['cache'] : TRUE;
-
 			// Create a new Compress instance.
 			Compress::$_instances[$name] = new Compress($config);
 		}

@@ -18,10 +18,6 @@ Garbage collect old compressed files?  When new files are compressed, the garbag
 
 Use file mod times when determining if the files need to be compressed?  If this is enabled, it will check if the files have changed since the last compression.  It is recommended to set this value to FALSE for very popular sites.
 
-		'cache' => TRUE,
-
-Use caching within the module (files will be recompressed on every request).
-
 		'compressor' => 'yui',
 
 Which compressor to use?  YUI is able to compress javascript and stylesheet files, so it is used by default.
