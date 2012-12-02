@@ -130,6 +130,10 @@ When using cssmin, make sure it is a path relative to the web server.
 		
 		echo HTML::style($result);
 
+### UglifyJS
+
+You will need to install UglifyJS on your server to use it in this module. See [http://lisperator.net/uglifyjs/](http://lisperator.net/uglifyjs/)
+
 ## Notes
 
 * If you don't have java on your web server (shared hosting), use the Closure Compiler Service and cssmin.
