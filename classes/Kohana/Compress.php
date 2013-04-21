@@ -113,7 +113,7 @@ abstract class Kohana_Compress {
 		$this->_config = $config;
 
 		// Load the specified type of compressor.
-		$compressor = 'Compress_Compressor_'.Text::ucfirst($config['compressor']);
+		$compressor = 'Compress_Compressor_'.Text::ucfirst($config['compressor'], '_');
 		$compressor_config = Kohana::$config->load('compress/compressor')->{$config['compressor']};
 		$this->_compressor = new $compressor($compressor_config);
 	}
