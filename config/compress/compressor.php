@@ -10,7 +10,7 @@ return array
 	'closure_application'	=> array
 	(
 		'java'				=> 'java',
-		'jar'				=> 'vendor/closure/closure-2180.jar',
+		'jar'				=> 'vendor/closure/closure-20130722.jar',
 		'compilation_level'	=> 'SIMPLE_OPTIMIZATIONS',
 	),
 	'closure_service'		=> array
